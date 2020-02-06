@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# project-specific
+*.db-journal
+*.db
+
+# testing stuff
+test.py
