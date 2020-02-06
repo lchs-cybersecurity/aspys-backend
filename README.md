@@ -12,7 +12,7 @@ Install/Run on native \*nix
 ---
 1. Make sure `python3` and `python3-pip` are installed.
 2. `pip3 install requirements.txt`
-3. /usr/bin/python3 main.py
+3. `/usr/bin/python3 main.py`
 
 Install/Run on native Windows
 ---
