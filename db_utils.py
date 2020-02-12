@@ -56,7 +56,7 @@ class ReportDatabase:
         c = dbconn.cursor()
 
         c.execute("SELECT * FROM reports")
-        return c.fetchall()
+        reports = c.fetchall()
 
         c.close()
         dbconn.close()
