@@ -13,7 +13,7 @@ LISTEN_PORT = 8000
 app = Flask(__name__)
 
 rdb = ReportDatabase("reports.db")
-rdb.create()
+rdb.create_db()
 
 # Flask: Listen for PUT https request from extensions
 @app.route("/report", methods=['POST', 'PUT'])
@@ -22,7 +22,7 @@ def handle_report():
 
 @app.route("/")
 def display_db_browser():
-    with open("db_browser.html") as dbb_file:
+    with open("pages/reportbrowser.html") as dbb_file:
         dbb_string = ""
         for line in dbb_file:
             dbb_string += str(line)
