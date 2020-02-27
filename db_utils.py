@@ -63,12 +63,29 @@ class ReportDatabase:
 
         return reports
 
-    # TODO: Delete by report ID
-    def delete(self, id: str):
+    def item(self, item_id: str):
+        """
+        Return database items as a list of string-tuples `(<identifier>, <timestamp>, <sender>, <content>)`
+        """
         dbconn = sqlite3.connect(self.db_filename)
         c = dbconn.cursor()
 
-        c.execute("DELETE FROM reports WHERE id = \'{}\'".format(id))
+        c.execute(f"SELECT * FROM reports WHERE id = \'{item_id}\'")
+        report = c.fetchall()[0]
+
+        c.close()
+        dbconn.close()
+
+        return report
+
+    def delete(self, item_id: str):
+        """
+        Delete item from database by ID
+        """
+        dbconn = sqlite3.connect(self.db_filename)
+        c = dbconn.cursor()
+
+        c.execute(f"DELETE FROM reports WHERE id = \'{item_id}\'")
 
         dbconn.commit()
         c.close()
@@ -77,7 +94,7 @@ class ReportDatabase:
     def clear(self):
         dbconn = sqlite3.connect(self.db_filename)
         c = dbconn.cursor()
-        
+
         c.execute("DELETE FROM reports")
 
         dbconn.commit()
