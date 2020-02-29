@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>
+        {% block title %}{% endblock %} | Domain Verifier
+        </title>
+    </head>
+
+    <style>
+        .content {
+            font-family: sans-serif;
+            padding-top:    30px;
+            padding-left:   50px;
+            padding-right:  50px;
+        }
+
+        header {
+            font-family: monospace;
+            padding:        1px;
+            padding-left:   20px;
+            padding-right:  20px;
+            background-color: gray;
+            color: whitesmoke;
+        }
+    </style>
+
+    <body>
+        <header>
+            <h2><strong>Domain Verifier Console</strong></h2>
+            <!--
+                Maybe add a login link/widget at right end of header bar. Would:
+                    - Tell whether or not user is logged in
+                    - If logged in, show user icon & username
+                    - If not, give login link and obscure site content
+            -->
+        </header>
+        <div class="content">
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+
+</html>

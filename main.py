@@ -33,12 +33,19 @@ def delete_item():
     rdb.delete(request.args["id"])
 
 @app.route("/")
-def display_db_browser():
-    with open("pages/reportbrowser.html") as dbb_file:
-        dbb_string = ""
-        for line in dbb_file:
-            dbb_string += str(line)
-        return dbb_string
+def display_login():
+    return render_template("login.html")
+
+@app.route("/browser")
+def display_browser():
+    return render_template("reportbrowser.html")
+
+    # CURSED CODE, NO TOUCH FOR NOW
+    # with open("templates/reportbrowser.html") as dbb_file:
+    #     dbb_string = ""
+    #     for line in dbb_file:
+    #         dbb_string += str(line)
+    #     return dbb_string
 
 # NOTE: `app.run` is for testing only, NOT deployment.
 # app.run(debug=True, )
