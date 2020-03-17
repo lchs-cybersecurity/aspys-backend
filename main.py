@@ -7,30 +7,35 @@ La Cañada Cybersecurity Club
 
 from flask import Flask, request, render_template
 from flask.json import jsonify
+from flask_cors import CORS
 from waitress import serve as waitress_serve
-from db_utils import ReportDatabase
+from datetime import datetime, timedelta
+import pytz
+import dataset
 
 LISTEN_PORT = 8000
 app = Flask(__name__)
+cors = CORS(app, resources={r"/report/*": {"origins": "*"}})
 
-rdb = ReportDatabase("reports.db")
-rdb.create_db()
+db = dataset.connect('sqlite:///reports.db')
+rdb = db.get_table('reports')
 
 # Flask: Listen for PUT https request from extensions
 @app.route("/report", methods=['POST', 'PUT'])
 def handle_report():
-    rdb.new_entry(request.args["sender"], request.args["content"])
+    data = request.get_json()
+    data['timestamp'] = datetime.now(pytz.utc)
+    rdb.insert(data)
+    return data, 200 # 200 indicates success to client
 
 # Flask: Listen for local GET request, return DB item dict
 @app.route("/items", methods=['GET'])
 def get_items():
     return jsonify(rdb.items())
-    # CURSED CODE, NO TOUCH
-    # http_put(f"http://localhost:{LISTEN_PORT}")
 
 @app.route("/delete", methods=['POST', 'PUT'])
 def delete_item():
-    rdb.delete(request.args["id"])
+    rdb.delete(receiver=request.args["receiver"])
 
 @app.route("/")
 def display_login():
@@ -40,13 +45,4 @@ def display_login():
 def display_browser():
     return render_template("reportbrowser.html")
 
-    # CURSED CODE, NO TOUCH FOR NOW
-    # with open("templates/reportbrowser.html") as dbb_file:
-    #     dbb_string = ""
-    #     for line in dbb_file:
-    #         dbb_string += str(line)
-    #     return dbb_string
-
-# NOTE: `app.run` is for testing only, NOT deployment.
-# app.run(debug=True, )
 waitress_serve(app, host='0.0.0.0', port=LISTEN_PORT)
