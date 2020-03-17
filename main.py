@@ -69,8 +69,22 @@ def handle_report():
     rdb.insert(data)
     return data, 200 # 200 indicates success to client
 
-# Flask: Listen for local GET request, return DB item dict
-@app.route("/items", methods=['GET'])
+
+@app.route("/handle_login", methods=['POST'])
+def handle_login():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    login_success = credman.check_credentials(username, password, logins)
+
+    # TEMP TEST
+    print(f"User: {username}\nPass: {password}")
+
+    # change login actions
+    return redirect("/")
+
+
+@app.route("/get_items", methods=['GET'])
 def get_items():
     return jsonify(rdb.items())
 
