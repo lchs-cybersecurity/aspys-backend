@@ -4,13 +4,16 @@
 
 {% block content %}
 
-<h2>LOGIN</h2>
-<form>
-    <label for="user">Username</label>
-    <input type="text" id="user"><br><br>
+<h2>🔐 LOGIN</h2>
+<form action="{{ url_for('handle_login') }}" method=post>
+    <input type="text" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder = "Password"><br><br>
 
-    <label for="pw">Password</label>
-    <input type="text" id="pw"><br><br>
+    {% if failed %}
+
+    <p><h3 style="color:red">Login failed.</h3></p>
+
+    {% endif %}
 
     <input type="submit" value="Log in">
 </form>
