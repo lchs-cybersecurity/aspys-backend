@@ -1,0 +1,23 @@
+.hidden {
+    display: none; 
+} 
+
+.report-div {
+    background-color: rgb(200, 200, 200); 
+    margin: 10px; 
+}
+
+.report-title {
+    font-size: 36px; 
+} 
+
+.body-title {
+    font-weight: bold; 
+    text-decoration: underline; 
+    margin: 10px; 
+    font-size: 25px
+}
+
+.report-content {
+    font-size: 20px; 
+}

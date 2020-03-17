@@ -1,0 +1,14 @@
+<title>Test</title> 
+<script src='{{jq_source}}'></script> 
+<script>{{script_text}}</script> 
+<style>{{style_text}}</style> 
+
+{% for ID, ts, sender, content in data %} 
+<div class='report-div'>
+    <div index='{{loop.index}}' class='report-title toggler'>{{sender}} - {{ts}}</div> 
+    <div index='{{loop.index}}' class='toggleable hidden'>
+        <div class='body-title'>Content</div> 
+        <div class='report-content'>{{content}}</div>
+    </div> 
+</div> 
+{% endfor %} 
