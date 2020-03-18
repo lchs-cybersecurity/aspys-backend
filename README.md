@@ -1,7 +1,10 @@
-⚙ Email Domain Verifier Extension Backend ⚙
+<div align="center">
+    <img src="static/favicon.ico" height=100/><br>
+⚙ Veritas Backend ⚙
 ===
+</div>
 
-Backend for the LCHS Cybersecurity Club's [Email Domain Verifier](https://github.com/lchs-cybersecurity/email-domain-verifier) web extension. Being written in Python, this *can* be run natively but in many cases would best be used with Docker.
+Backend for the LCHS Cybersecurity Club's [Veritas](https://github.com/lchs-cybersecurity/email-domain-verifier) extension. Being written in Python, this *can* be run natively but in many cases would best be used with Docker.
 
 Install/Run on Docker
 ---
@@ -11,11 +14,11 @@ Install/Run on Docker
 Install/Run on native \*nix
 ---
 1. Make sure `python3` and `python3-pip` are installed.
-2. `pip3 install requirements.txt`
+2. `pip3 install -r requirements.txt`
 3. `/usr/bin/python3 main.py`
 
 Install/Run on native Windows
 ---
-1. Make sure [Python 3.7.x for Windows](https://www.python.org/downloads/windows/) is installed.
-2. `py.exe -3.7 -m pip install .\requirements.txt`
+1. Make sure [Python 3.7.x](https://www.python.org/downloads/windows/) is installed.
+2. `py.exe -3.7 -m pip install -r .\requirements.txt`
 3. `py.exe -3.7 .\main.py`
