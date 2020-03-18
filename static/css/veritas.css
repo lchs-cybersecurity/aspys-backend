@@ -1,0 +1,185 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Ubuntu Regular'), local('Ubuntu-Regular'), url(https://fonts.gstatic.com/s/ubuntu/v14/4iCs6KVjbNBYlgoKfw72nU6AFw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #00a380;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px #00a380;
+}
+
+body {
+  font-family: 'Ubuntu', Roboto, sans-serif;
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  color: #ffffffe0;
+  background: linear-gradient(135deg, #004a28 0%, #002c36 100%);
+}
+
+header {
+  display: flex;
+  padding: 40px;
+  align-items: center;
+}
+
+label {
+  font-size: 16px;
+  padding-right: 4px;
+}
+
+ul.fields {
+  list-style: none;
+  padding: 0px 40px;
+}
+
+li {
+  padding: 8px 0;
+}
+
+input, textarea {
+  border: 1px solid #222222;
+  background-color: #ffffff00;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+input[type="text"], input[type="password"] {
+    width: 200px;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.gray, input[readonly] {
+  color: #707070;
+  border-color: #cecece;
+}
+.gray:focus, input[readonly]:focus {
+  box-shadow: 0px 0px 5px #707070;
+}
+
+button {
+  font-size: 20px;
+  color: #ffffffe0;
+  border-radius: 8px;
+  padding: 8px;
+  background: linear-gradient(135deg, #00a558 0%, #007994 100%);
+  background-blend-mode: multiply;
+  background-color: #ffffff;
+  transition: background-color 0.2s;
+  border: none;
+}
+
+button:hover {
+  background-color: #cecece;
+}
+
+button:disabled {
+  color: #aaaaaa;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display:flex;
+  align-items: flex-end;
+  font-size: 16px;
+}
+
+.extension-logo {
+  width: 48px;
+  height: 48px;
+  padding: 0px;
+}
+
+.extension-name {
+  font-size: 24px;
+  padding-left: 4px;
+}
+
+.contents {
+  padding: 20px 40px;
+  width: 600px;
+  color: black;
+  background-color: #ffffffe0;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .contents {
+    border-radius: 0px;
+    width: 100%;
+  }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .contents {
+    width: 480px;
+  }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .contents {
+    width: 600px;
+  }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .contents {
+    width: 600px;
+  }
+}
+
+.footer-left {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  float: left;
+  padding: 20px;
+}
+
+.footer-right {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.centered {
+    text-align: center;
+}
+
+.green {
+  color: #00aa77;
+  border-color: #00aa77;
+}
+
+.red {
+  color: #cc0044;
+  border-color: #cc0044;
+}
+  
+a:link, a:visited {
+  color: #00aa77;
+}
+
+a:hover {
+  color: #00cc77;
+}

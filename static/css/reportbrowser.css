@@ -1,0 +1,20 @@
+.reports {
+  /* border: 1px solid black; */
+  width: 100%;
+  overflow: scroll;
+}
+
+.reports-headers {
+  color: #ffffff;
+  border: none;
+  background: linear-gradient(135deg, #00a558 0%, #007994 100%);
+}
+
+.reports-row {
+  background-color: #ffffffd0;
+}
+
+.contents-container {
+  max-height: 200px;
+  overflow: scroll;
+}

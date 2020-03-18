@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Report Browser{% endblock %}
+
+{% block content %}
+
+    <div class="reports">
+    <table>
+        {% if data %}
+            <tr class="reports-headers">
+                <th>Timestamp</th>
+                <th>Reporter</th>
+                <th>Reportee</th>
+                <th>Contents</th>
+                <th>Note</th>
+            </tr>
+
+            {% for report in data %}
+                <tr class="reports-row">
+                    <td>{{ report['timestamp'] }}</td>
+                    <td>{{ report['reporter'] }}</td>
+                    <td>{{ report['reportee'] }}</td>
+                    <td>
+                        <div class="contents-container">
+                            {{ report['body']|safe }}
+                        </div>
+                    </td>
+                    <td>{{ report['note'] }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>No entries.</tr>
+        {% endif %}
+    </table>
+    </div>
+    {% endblock %}
+
+{% block css %}
+    <link href="{{ url_for('static',filename='css/reportbrowser.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static',filename='js/lib/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/reportbrowser.js') }}"></script>
+{% endblock %}

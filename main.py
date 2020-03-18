@@ -21,7 +21,7 @@ from login_utils import CredentialsManager
 # Flask boilerplate
 LISTEN_PORT = 8000
 app = Flask(__name__)
-cors = CORS(app, resources={r"/report/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/handle_report/*": {"origins": "*"}})
 
 db = dataset.connect('sqlite:///reports.db')
 rdb = db.get_table('reports')
@@ -69,7 +69,6 @@ def handle_report():
     rdb.insert(data)
     return data, 200 # 200 indicates success to client
 
-
 @app.route("/handle_login", methods=['POST'])
 def handle_login():
     username = request.form.get("username")
@@ -84,20 +83,17 @@ def handle_login():
     return redirect("/")
 
 
-@app.route("/get_items", methods=['GET'])
-def get_items():
-    return jsonify(rdb.items())
-
 @app.route("/delete", methods=['POST', 'PUT'])
 def delete_item():
-    rdb.delete(receiver=request.args["receiver"])
+    rdb.delete(receiver=request.args.get("receiver"))
 
 @app.route("/")
 def display_login():
     return render_template("login.html")
 
-@app.route("/browser")
-def display_browser():
-    return render_template("reportbrowser.html")
+@app.route("/browser/<receiver>")
+def display_browser(receiver):
+    data = rdb.find(receiver=receiver)
+    return render_template("reportbrowser.html", data=data)
 
 waitress_serve(app, host='0.0.0.0', port=LISTEN_PORT)

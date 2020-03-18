@@ -1,43 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-    <head>
-        <title>
-        {% block title %}{% endblock %} | Domain Verifier
-        </title>
-    </head>
+    {%- macro title() -%}
+      {% block title %}{% endblock %}
+    {%- endmacro -%}
 
-    <style>
-        .content {
-            font-family: sans-serif;
-            padding-top:    30px;
-            padding-left:   50px;
-            padding-right:  50px;
-        }
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="{{ url_for('static',filename='css/veritas.css') }}" rel="stylesheet"/>
+    {% block css %}{% endblock %}
+    <title>{{ title() }} | Veritas</title>
+  </head>
 
-        header {
-            font-family: monospace;
-            padding:        1px;
-            padding-left:   20px;
-            padding-right:  20px;
-            background-color: gray;
-            color: whitesmoke;
-        }
-    </style>
+  <body>
 
-    <body>
-        <header>
-            <h2><strong>Domain Verifier Console</strong></h2>
-            <!--
-                Maybe add a login link/widget at right end of header bar. Would:
-                    - Tell whether or not user is logged in
-                    - If logged in, show user icon & username
-                    - If not, give login link and obscure site content
-            -->
-        </header>
-        <div class="content">
+    <header>
+      <img class='extension-logo' src="https://raw.githubusercontent.com/lchs-cybersecurity/veritas/master/assets/veritas.svg?sanitize=true" alt="Veritas">
+      <span class='extension-name'>Veritas</span>
+      <!-- Login widget -->
+    </header>
+
+    <div class="contents">
+      <h1>{{ title() }}</h1>
         {% block content %}{% endblock %}
-        </div>
-    </body>
+    </div>
 
+    <footer>
+      <div class="footer-right">
+        <span>developed by <a href="https://lchs-cybersecurity.github.io/lchs-cybersecurity-site/">LCHS Cybersecurity Club</a></span><br/>
+      </div>
+    </footer>
+
+  </body>
+
+  {% block js %}{% endblock %}
+ 
 </html>

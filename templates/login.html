@@ -3,19 +3,30 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+    <form action="{{ url_for('handle_login') }}" method=post id="login-form">
+        <ul class="fields">
+            <li>
+                <label for="username">Username</label></br>
+                <input type="text" id="username" style="width:200px">
+            </li>
+            <li>
+                <label for="password">Password</label></br>
+                <input type="password" id="password" style="width:200px">
+            </li>
+        </ul>
 
-<h2>🔐 LOGIN</h2>
-<form action="{{ url_for('handle_login') }}" method=post>
-    <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder = "Password"><br><br>
+        <!-- Change to something stylish -->
+        {% if failed %}
+            <p><h3 style="color:red">Login failed.</h3></p>
+        {% endif %}
 
-    {% if failed %}
+        <div class="centered">
+            <button id="login-button" type="button">Login</button>
+        </div>
+    </form>
+{% endblock %}
 
-    <p><h3 style="color:red">Login failed.</h3></p>
-
-    {% endif %}
-
-    <input type="submit" value="Log in">
-</form>
-
+{% block js %}
+    <script src="{{ url_for('static',filename='js/lib/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/login.js') }}"></script>
 {% endblock %}
