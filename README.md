@@ -1,7 +1,6 @@
 <div align="center">
     <img src="static/favicon.ico" height=100/><br>
-⚙ Veritas Backend ⚙
-===
+<h1>⚙ Veritas Backend ⚙</h1>
 </div>
 
 Backend for the LCHS Cybersecurity Club's [Veritas](https://github.com/lchs-cybersecurity/email-domain-verifier) extension. Being written in Python, this *can* be run natively but in many cases would best be used with Docker.
