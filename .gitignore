@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Other project stuff
+data/*
+
 # project-specific
 .vscode/
 *.db-journal
