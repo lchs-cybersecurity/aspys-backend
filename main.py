@@ -10,21 +10,22 @@ from flask.json import jsonify
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required
 from waitress import serve as waitress_serve
-from datetime import datetime, timedelta
-import pytz
 import dataset
+import requests
 from pickle import dump as pkl_dump, load as pkl_load
 from json import load as json_load, dumps as json_dumps
 from getpass import getpass
 from login_utils import CredentialsManager
+from other_utils import *
 
 # Flask boilerplate
 LISTEN_PORT = 8000
 app = Flask(__name__)
-cors = CORS(app, resources={r"/handle_report/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 db = dataset.connect('sqlite:///reports.db')
 rdb = db.get_table('reports')
+fdb = db.get_table('feedback')
 
 login_manager = LoginManager()
 
@@ -62,12 +63,45 @@ except FileNotFoundError:
 
 # --- Server Listener actions ---
 
-@app.route("/handle_report", methods=['POST', 'PUT'])
+@app.route("/api/report", methods=['POST', 'PUT'])
 def handle_report():
     data = request.get_json()
-    data['timestamp'] = datetime.now(pytz.utc)
+    data['timestamp'] = now()
     rdb.insert(data)
     return data, 200 # 200 indicates success to client
+
+
+@app.route("/api/feedback", methods=['POST', 'PUT'])
+def handle_feedback():
+    data = request.get_json()
+    data['timestamp'] = now()
+    fdb.insert(data)
+    try:
+        with open("config.json", "r") as config_file:
+            config = json_load(config_file)
+        if "discord_webhook" in config:
+            discord_webhook = config['discord_webhook']
+            embed_fields = []
+            for key, field in data.items():
+                print(field)
+                embed_fields.append({
+                    "name":limit_str(field["label"], 256),
+                    "value":limit_str(field["value"], 1024)
+                })
+            message = {
+                "embeds": [{
+                    "color": "53622",
+                    "title": "Feedback",
+                    "timestamp": str(now()),
+                    "fields": embed_fields
+                }]
+            }
+            response = requests.post(discord_webhook, json=message)
+    except Exception as e:
+        print(f"Exception: {e}")
+        return data, 400
+    return data, 200
+
 
 @app.route("/handle_login", methods=['POST'])
 def handle_login():
@@ -87,9 +121,11 @@ def handle_login():
 def delete_item():
     rdb.delete(receiver=request.args.get("receiver"))
 
+
 @app.route("/")
 def display_login():
     return render_template("login.html")
+
 
 @app.route("/browser/<receiver>")
 def display_browser(receiver):

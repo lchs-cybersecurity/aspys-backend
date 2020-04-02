@@ -139,3 +139,4 @@ data/*
 # testing stuff
 test.py
 .DS_Store
+Pipfile.lock
