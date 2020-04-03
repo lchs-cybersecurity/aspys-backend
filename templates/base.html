@@ -21,7 +21,7 @@
       <!-- Login widget -->
     </header>
 
-    <div class="contents">
+    <div class="contents {% block content_class %}{% endblock %}">
       <h1>{{ title() }}</h1>
         {% block content %}{% endblock %}
     </div>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content_class %}window{% endblock %}
+{% block content %}
+    <div class="notice-box">We're still working on this page!</div>
+    <h2>Is this application safe?</h2>
+    <p>This is a valid question. Chrome extensions can contain malware, even though the Chrome Webstore does its best to evaluate all extensions put on the store, many malicious extensions are known to have been put up. As for Veritas, we are a <a href="https://lchs-cybersecurity.github.io/lchs-cybersecurity-site/">small team of student developers</a>, so the source code for this extension is publicly available. You can review it here: <a href="https://github.com/lchs-cybersecurity/veritas">https://github.com/lchs-cybersecurity/veritas</a></p>
+    <h2>How does the credibility rating work?</h2>
+    <p>Currently we are using site ranking. Phishing sites are typically quickly put online and taken down, so most phishing sites will be very new and from unknown domains. We are working on taking into account other factors such as geo-location and impersonation. We hope to also partner up with other phish-detecting organizations.</p>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

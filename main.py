@@ -92,21 +92,31 @@ def handle_bug():
 
 @app.route("/handle_login", methods=['POST'])
 def handle_login():
-    username = request.form.get("username")
-    password = request.form.get("password")
+    # username = request.form.get("username")
+    # password = request.form.get("password")
 
-    login_success = credman.check_credentials(username, password, logins)
+    # login_success = credman.check_credentials(username, password, logins)
 
-    # TEMP TEST
-    print(f"User: {username}\nPass: {password}")
+    # # TEMP TEST
+    # print(f"User: {username}\nPass: {password}")
 
     # change login actions
-    return redirect("/")
+    return redirect("/browser/testadmin@mail.com")
 
 
 @app.route("/delete", methods=['POST', 'PUT'])
 def delete_item():
     rdb.delete(receiver=request.args.get("receiver"))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.route("/info")
+def display_info():
+    return render_template("info.html")
 
 
 @app.route("/")
@@ -116,7 +126,8 @@ def display_login():
 
 @app.route("/browser/<receiver>")
 def display_browser(receiver):
-    data = rdb.find(receiver=receiver)
+    # data = rdb.find(receiver=receiver)
+    data = rdb.all()
     return render_template("reportbrowser.html", data=data)
 
 waitress_serve(app, host='0.0.0.0', port=LISTEN_PORT)

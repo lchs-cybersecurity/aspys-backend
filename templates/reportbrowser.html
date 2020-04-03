@@ -2,17 +2,18 @@
 
 {% block title %}Report Browser{% endblock %}
 
+{% block content_class %}full{% endblock %}
 {% block content %}
 
     <div class="reports">
     <table>
         {% if data %}
             <tr class="reports-headers">
-                <th>Timestamp</th>
-                <th>Reporter</th>
-                <th>Reportee</th>
-                <th>Contents</th>
-                <th>Note</th>
+                <th width=200>Timestamp</th>
+                <th width=200>Reporter</th>
+                <th width=200>Reportee</th>
+                <th width=400>Contents</th>
+                <th width=200>Note</th>
             </tr>
 
             {% for report in data %}

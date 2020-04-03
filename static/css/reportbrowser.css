@@ -1,7 +1,6 @@
 .reports {
-  /* border: 1px solid black; */
-  width: 100%;
   overflow: scroll;
+  font-size: 14px;
 }
 
 .reports-headers {
