@@ -140,3 +140,4 @@ data/*
 test.py
 .DS_Store
 Pipfile.lock
+config.json

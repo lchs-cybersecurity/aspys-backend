@@ -25,7 +25,6 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 db = dataset.connect('sqlite:///reports.db')
 rdb = db.get_table('reports')
-fdb = db.get_table('feedback')
 
 login_manager = LoginManager()
 
@@ -65,7 +64,7 @@ except FileNotFoundError:
 
 @app.route("/api/report", methods=['POST', 'PUT'])
 def handle_report():
-    data = request.get_json()
+    data = request.get_json()['data']
     data['timestamp'] = now()
     rdb.insert(data)
     return data, 200 # 200 indicates success to client
@@ -73,33 +72,21 @@ def handle_report():
 
 @app.route("/api/feedback", methods=['POST', 'PUT'])
 def handle_feedback():
-    data = request.get_json()
+    data = request.get_json()['data']
     data['timestamp'] = now()
+    fdb = db.get_table('feedback')
     fdb.insert(data)
-    try:
-        with open("config.json", "r") as config_file:
-            config = json_load(config_file)
-        if "discord_webhook" in config:
-            discord_webhook = config['discord_webhook']
-            embed_fields = []
-            for key, field in data.items():
-                print(field)
-                embed_fields.append({
-                    "name":limit_str(field["label"], 256),
-                    "value":limit_str(field["value"], 1024)
-                })
-            message = {
-                "embeds": [{
-                    "color": "53622",
-                    "title": "Feedback",
-                    "timestamp": str(now()),
-                    "fields": embed_fields
-                }]
-            }
-            response = requests.post(discord_webhook, json=message)
-    except Exception as e:
-        print(f"Exception: {e}")
-        return data, 400
+    tryDiscordSend(request.get_json()['discord'])
+    return data, 200
+
+
+@app.route("/api/bug", methods=['POST', 'PUT'])
+def handle_bug():
+    data = request.get_json()['data']
+    data['timestamp'] = now()
+    bdb = db.get_table('bugs')
+    bdb.insert(data)
+    tryDiscordSend(request.get_json()['discord'])
     return data, 200
 
 
