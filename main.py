@@ -92,16 +92,16 @@ def handle_bug():
 
 @app.route("/handle_login", methods=['POST'])
 def handle_login():
-    # username = request.form.get("username")
-    # password = request.form.get("password")
-
-    # login_success = credman.check_credentials(username, password, logins)
-
-    # # TEMP TEST
-    # print(f"User: {username}\nPass: {password}")
-
-    # change login actions
-    return redirect("/browser/testadmin@mail.com")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    for login in logins:
+        if username == login[0] and credman.sh_pw(password) == login[1]:
+            # user = User(len(active_users))
+            # active_users.append(user)
+            # login_user(user)
+            return redirect("/browser")
+        else:
+            return redirect("/")
 
 
 @app.route("/delete", methods=['POST', 'PUT'])
