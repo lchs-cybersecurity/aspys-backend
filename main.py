@@ -19,7 +19,7 @@ from login_utils import CredentialsManager
 from other_utils import *
 
 # Flask boilerplate
-LISTEN_PORT = 8000
+LISTEN_PORT = 8080
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
