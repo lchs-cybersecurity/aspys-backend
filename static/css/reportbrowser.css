@@ -1,5 +1,4 @@
 .reports {
-  overflow: scroll;
   font-size: 14px;
 }
 
@@ -11,9 +10,15 @@
 
 .reports-row {
   background-color: #ffffffd0;
-}
+} 
 
 .contents-container {
-  max-height: 200px;
-  overflow: scroll;
+  width: 300px; 
+  text-align: center; 
+  word-wrap: break-word; 
+} 
+
+.compressed {
+  max-height: 100px; 
+  overflow: hidden; 
 }

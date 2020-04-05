@@ -9,24 +9,30 @@
     <table>
         {% if data %}
             <tr class="reports-headers">
-                <th width=200>Timestamp</th>
-                <th width=200>Reporter</th>
-                <th width=200>Reportee</th>
-                <th width=400>Contents</th>
-                <th width=200>Note</th>
+                <th class='contents-container'>Timestamp</th>
+                <th class='contents-container'>Reporter</th>
+                <th class='contents-container'>Reportee</th>
+                <th class='contents-container'>Contents</th>
+                <th class='contents-container'>Note</th>
             </tr>
 
             {% for report in data %}
                 <tr class="reports-row" id="report-at-{{ report['timestamp'] }}">
-                    <td>{{ report['timestamp'] }}</td>
-                    <td>{{ report['reporter'] }}</td>
-                    <td>{{ report['reportee'] }}</td>
                     <td>
-                        <div class="contents-container">
-                            {{ report['body']|safe }}
-                        </div>
+                        <div class='contents-container compressed'>{{ report['timestamp'] }}</div>
                     </td>
-                    <td>{{ report['note'] }}</td>
+                    <td>
+                        <div class='contents-container compressed'>{{ report['reporter'] }}</div>
+                    </td>
+                    <td>
+                        <div class='contents-container compressed'>{{ report['reportee'] }}</div>
+                    </td>
+                    <td>
+                        <div class='contents-container compressed'>{{ report['body'] | safe }}</div>
+                    </td>
+                    <td>
+                        <div class='contents-container compressed'>{{ report['note'] }}</div>
+                    </td>
                     <td>
                         <button class='deleter-button' will_delete="{{ report['timestamp'] }}">delete</button>
                     </td> 
@@ -64,16 +70,22 @@
 
                 $(`#report-at-${timestamp}`).prop('hidden', true); //hides the html element that corresponds to the report
             }); 
+
             request.fail(function( jqXHR, textStatus ) {
                 console.log(jqXHR)
             }); 
         } 
 
         $('.deleter-button').click(function(e) { //le event for when you click dat delete button
-            let el = e.target; 
-            let timestamp = el.getAttribute('will_delete'); //each of these buttons has this attribute, specifying which report to delete
+            let timestamp = this.getAttribute('will_delete'); //each of these buttons has this attribute, specifying which report to delete
 
             sendDelete(timestamp); 
+        }) 
+
+        $('.reports-row').click(function(e) { //when you click anywhere on the report
+            //console.log(this.children); 
+
+            $(this).find('.contents-container').toggleClass('compressed'); //toggles the compression stuff
         })
     </script>
 {% endblock %}
