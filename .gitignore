@@ -128,13 +128,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Other project stuff
-data/*
-
 # project-specific
 .vscode/
 *.db-journal
 *.db
+data/*
+!data/.gitkeep
 
 # testing stuff
 test.py
