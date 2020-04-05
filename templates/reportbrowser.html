@@ -17,7 +17,7 @@
             </tr>
 
             {% for report in data %}
-                <tr class="reports-row">
+                <tr class="reports-row" id="report-at-{{ report['timestamp'] }}">
                     <td>{{ report['timestamp'] }}</td>
                     <td>{{ report['reporter'] }}</td>
                     <td>{{ report['reportee'] }}</td>
@@ -27,6 +27,9 @@
                         </div>
                     </td>
                     <td>{{ report['note'] }}</td>
+                    <td>
+                        <button class='deleter-button' will_delete="{{ report['timestamp'] }}">delete</button>
+                    </td> 
                 </tr>
             {% endfor %}
         {% else %}
@@ -41,6 +44,36 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{{ url_for('static',filename='js/lib/jquery.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="{{ url_for('static',filename='js/reportbrowser.js') }}"></script>
+    <script>
+        function sendDelete(timestamp) {
+            //makes the request
+            let request = $.ajax({
+                type: "POST",
+                url: "{{ url_for('delete_item') }}", 
+                contentType: "application/json", 
+                dataType: "json",
+                data: JSON.stringify({
+                    timestamp: timestamp, 
+                }),  
+            }); 
+
+            request.done(function( msg ) { //success
+                console.log(msg) //console logs
+
+                $(`#report-at-${timestamp}`).prop('hidden', true); //hides the html element that corresponds to the report
+            }); 
+            request.fail(function( jqXHR, textStatus ) {
+                console.log(jqXHR)
+            }); 
+        } 
+
+        $('.deleter-button').click(function(e) { //le event for when you click dat delete button
+            let el = e.target; 
+            let timestamp = el.getAttribute('will_delete'); //each of these buttons has this attribute, specifying which report to delete
+
+            sendDelete(timestamp); 
+        })
+    </script>
 {% endblock %}

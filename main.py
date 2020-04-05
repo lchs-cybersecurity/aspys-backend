@@ -19,13 +19,14 @@ from login_utils import CredentialsManager
 from other_utils import *
 
 # Flask boilerplate
-LISTEN_PORT = 8000
+LISTEN_PORT = 8080
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 db = dataset.connect('sqlite:///reports.db')
 rdb = db.get_table('reports')
 
+'''
 login_manager = LoginManager()
 
 # Load salter-hasher
@@ -58,6 +59,7 @@ except FileNotFoundError:
     print(f"User {username} added.")
     with open("data/logins.json", "w+") as logins_file:
         logins_file.write(json_dumps(logins))
+''' 
 
 
 # --- Server Listener actions ---
@@ -105,9 +107,14 @@ def handle_login():
 
 
 @app.route("/delete", methods=['POST', 'PUT'])
-def delete_item():
-    rdb.delete(receiver=request.args.get("receiver"))
+def delete_item(): 
+    json = request.get_json() 
 
+    print(json)  
+
+    rdb.delete(timestamp=json.get('timestamp')) 
+
+    return json, 200
 
 @app.errorhandler(404)
 def page_not_found(e):
