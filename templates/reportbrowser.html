@@ -6,42 +6,57 @@
 {% block content %}
 
     <div class="reports">
-    <table>
-        {% if data %}
-            <tr class="reports-headers">
-                <th class='contents-container'>Timestamp</th>
-                <th class='contents-container'>Reporter</th>
-                <th class='contents-container'>Reportee</th>
-                <th class='contents-container'>Contents</th>
-                <th class='contents-container'>Note</th>
+    {% if data %} 
+        <table>
+            <tr class='reports-headers'>
+                <th width=200>Timestamp</th>
+                <th width=500>Reporter</th>
+                <th width=500>Reportee</th>
             </tr>
-
-            {% for report in data %}
-                <tr class="reports-row" id="report-at-{{ report['timestamp'] }}">
-                    <td>
-                        <div class='contents-container compressed'>{{ report['timestamp'] }}</div>
-                    </td>
-                    <td>
-                        <div class='contents-container compressed'>{{ report['reporter'] }}</div>
-                    </td>
-                    <td>
-                        <div class='contents-container compressed'>{{ report['reportee'] }}</div>
-                    </td>
-                    <td>
-                        <div class='contents-container compressed'>{{ report['body'] | safe }}</div>
-                    </td>
-                    <td>
-                        <div class='contents-container compressed'>{{ report['note'] }}</div>
-                    </td>
-                    <td>
-                        <button class='deleter-button' will_delete="{{ report['timestamp'] }}">delete</button>
-                    </td> 
-                </tr>
-            {% endfor %}
-        {% else %}
-            <tr>No entries.</tr>
-        {% endif %}
-    </table>
+        </table>
+        {% for report in data %} 
+            <div id="report-at-{{ report['timestamp'] }}">
+                <div class='full-report-toggle' toggles="{{ report['timestamp'] }}">
+                    <table>
+                        <tr class='reports-row'>
+                            <th width=200>
+                                <div class='contents-container'>{{ report['timestamp'] }}</div> 
+                            </th>
+                            <th width=500>
+                                <div class='contents-container'>{{ report['reporter'] }}</div> 
+                            </th>
+                            <th width=500>
+                                <div class='contents-container'>{{ report['reportee'] }}</div> 
+                            </th>
+                        </tr>
+                    </table>
+                </div> 
+                <div class='full-report hidden' id="full-report-{{ report['timestamp'] }}">
+                    <br>
+                    <div class='report-header'>
+                        <span class='report-title'>Author:</span><span> {{ report['reporter'] }}</span> 
+                    </div>
+                    <div class='report-header'>
+                        <span class='report-title'>Target:</span><span> {{ report['reportee'] }}</span> 
+                    </div>
+                    <div class='report-header'>
+                        <span class='report-title'>Time:</span><span> {{ report['timestamp'] }}</span> 
+                    </div>
+                    <br>
+                    <p class='report-title report-header'>Body:</p>
+                    <p>{{ report['body'] }}</p>
+                    <br>
+                    <p class='report-title report-header'>Note:</p>
+                    <p>{{ report['note'] }}</p>
+                    <br>
+                    <button class='deleter-button' will-delete="{{ report['timestamp'] }}">delete</button> 
+                    <br><br>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div>No entries.</div>
+    {% endif %}
     </div>
     {% endblock %}
 
@@ -77,15 +92,16 @@
         } 
 
         $('.deleter-button').click(function(e) { //le event for when you click dat delete button
-            let timestamp = this.getAttribute('will_delete'); //each of these buttons has this attribute, specifying which report to delete
+            let timestamp = this.getAttribute('will-delete'); //each of these buttons has this attribute, specifying which report to delete
 
             sendDelete(timestamp); 
         }) 
-
-        $('.reports-row').click(function(e) { //when you click anywhere on the report
+        
+        $('.full-report-toggle').click(function(e) { //when you click anywhere on the report header thing
             //console.log(this.children); 
+            let id = this.getAttribute('toggles'); 
 
-            $(this).find('.contents-container').toggleClass('compressed'); //toggles the compression stuff
-        })
+            $(`#full-report-${id}`).slideToggle(); //toggles the s l i d e
+        }); 
     </script>
 {% endblock %}

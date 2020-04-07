@@ -13,12 +13,27 @@
 } 
 
 .contents-container {
-  width: 300px; 
   text-align: center; 
+  vertical-align: middle;
   word-wrap: break-word; 
+  height: 20px; 
+  overflow: hidden; 
 } 
 
-.compressed {
-  max-height: 100px; 
-  overflow: hidden; 
+.full-report {
+  background-color: #ffffff;
+  font-size: 20px; 
+} 
+
+.report-header {
+  font-size: 30px; 
+}
+
+.report-title {
+  text-decoration: underline; 
+  font-weight: bold; 
+} 
+
+.hidden {
+  display: none; 
 }
