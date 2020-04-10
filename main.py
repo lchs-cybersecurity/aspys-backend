@@ -5,7 +5,7 @@ PhishDetector Backend
 La Cañada Cybersecurity Club
 """
 
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session
 from flask.json import jsonify
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required
@@ -15,19 +15,51 @@ import requests
 from pickle import dump as pkl_dump, load as pkl_load
 from json import load as json_load, dumps as json_dumps
 from getpass import getpass
+from os import urandom
 from login_utils import CredentialsManager
 from other_utils import *
+
+# Load config
+with open("config.json", "r+", encoding="utf-8") as config_file:
+    config = dict(json_load(config_file))
+
+    # Generate unique client secret
+    if config["secret_key"] == "":
+        config["secret_key"] = str(urandom(32))
+        config_file.seek(0)
+        config_file.write(json_dumps(config))
+        config_file.truncate()
 
 # Flask boilerplate
 LISTEN_PORT = 8080
 app = Flask(__name__)
+app.config['TESTING'] = False
+app.secret_key = config["secret_key"]
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 db = dataset.connect('sqlite:///reports.db')
 rdb = db.get_table('reports')
 
-'''
 login_manager = LoginManager()
+login_manager.session_protection = "strong"
+login_manager.login_view = "/"
+login_manager.init_app(app)
+
+active_users = []
+class User(UserMixin):
+    userid = ""
+    
+    def __init__(self, new_id: str):
+        self.userid = new_id
+    
+    def get_id(self):
+        return self.userid
+
+@login_manager.user_loader
+def load_user(userid: str):
+    # return active_users[int(userid)]
+    return User(userid)
+
 
 # Load salter-hasher
 try:
@@ -59,7 +91,6 @@ except FileNotFoundError:
     print(f"User {username} added.")
     with open("data/logins.json", "w+") as logins_file:
         logins_file.write(json_dumps(logins))
-''' 
 
 
 # --- Server Listener actions ---
@@ -98,11 +129,13 @@ def handle_login():
     password = request.form.get("password")
     for login in logins:
         if username == login[0] and credman.sh_pw(password) == login[1]:
-            # user = User(len(active_users))
-            # active_users.append(user)
-            # login_user(user)
+            user = User(str(len(active_users)))
+            active_users.append(user)
+            login_user(user)
+            print(f"Logged in user {username}.")
             return redirect("/browser")
         else:
+            print("Login failed.")
             return redirect("/")
 
 
@@ -130,11 +163,16 @@ def display_info():
 def display_login():
     return render_template("login.html")
 
+# NOTE: Currently single-organization, but that may be subject to change
+@app.route("/browser")
+@login_required
+def display_browser():
+    return render_template("reportbrowser.html")
 
-@app.route("/browser/<receiver>")
-def display_browser(receiver):
-    # data = rdb.find(receiver=receiver)
-    data = rdb.all()
-    return render_template("reportbrowser.html", data=data)
+# @app.route("/browser/<receiver>")
+# def display_browser(receiver):
+#     # data = rdb.find(receiver=receiver)
+#     data = rdb.all()
+#     return render_template("reportbrowser.html", data=data)
 
 waitress_serve(app, host='0.0.0.0', port=LISTEN_PORT)
