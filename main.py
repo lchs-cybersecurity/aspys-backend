@@ -167,7 +167,8 @@ def display_login():
 @app.route("/browser")
 @login_required
 def display_browser():
-    return render_template("reportbrowser.html")
+    data = rdb.all()
+    return render_template("reportbrowser.html", data=data)
 
 # @app.route("/browser/<receiver>")
 # def display_browser(receiver):
