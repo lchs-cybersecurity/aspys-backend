@@ -9,13 +9,14 @@ from flask import Flask, request, render_template, redirect, session
 from flask.json import jsonify
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required
-from waitress import serve as waitress_serve
 import dataset
 import requests
 from pickle import dump as pkl_dump, load as pkl_load
 from json import load as json_load, dumps as json_dumps
 from getpass import getpass
 from os import urandom
+from werkzeug.serving import run_simple
+
 from login_utils import CredentialsManager
 from other_utils import *
 
@@ -158,7 +159,6 @@ def page_not_found(e):
 def display_info():
     return render_template("info.html")
 
-
 @app.route("/")
 def display_login():
     return render_template("login.html")
@@ -176,4 +176,4 @@ def display_browser():
 #     data = rdb.all()
 #     return render_template("reportbrowser.html", data=data)
 
-waitress_serve(app, host='0.0.0.0', port=LISTEN_PORT)
+run_simple('0.0.0.0', 8080, app, ssl_context='adhoc')
