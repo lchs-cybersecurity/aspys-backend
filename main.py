@@ -176,4 +176,4 @@ def display_browser():
 #     data = rdb.all()
 #     return render_template("reportbrowser.html", data=data)
 
-run_simple('0.0.0.0', 8080, app, ssl_context='adhoc')
+run_simple('0.0.0.0', 443, app, ssl_context='adhoc')
