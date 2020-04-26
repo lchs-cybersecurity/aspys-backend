@@ -103,7 +103,7 @@ footer {
 .extension-logo {
   width: 48px;
   height: 48px;
-  padding: 0px;
+  padding: 5px;
 }
 
 .extension-name {
@@ -194,4 +194,13 @@ a:link, a:visited {
 
 a:hover {
   color: #00cc77;
+}
+
+.navbar {
+  margin-left: auto;
+  margin-right: 10%;
+}
+
+.navbar-item {
+  padding: 5px;
 }

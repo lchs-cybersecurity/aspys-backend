@@ -23,6 +23,7 @@ from other_utils import *
 # Load config
 with open("config.json", "r+", encoding="utf-8") as config_file:
     config = dict(json_load(config_file))
+    LISTEN_PORT = config["port"]
 
     # Generate unique client secret
     if config["secret_key"] == "":
@@ -32,7 +33,6 @@ with open("config.json", "r+", encoding="utf-8") as config_file:
         config_file.truncate()
 
 # Flask boilerplate
-LISTEN_PORT = 8080
 app = Flask(__name__)
 app.config['TESTING'] = False
 app.secret_key = config["secret_key"]
@@ -176,4 +176,4 @@ def display_browser():
 #     data = rdb.all()
 #     return render_template("reportbrowser.html", data=data)
 
-run_simple('0.0.0.0', 443, app, ssl_context='adhoc')
+run_simple('0.0.0.0', LISTEN_PORT, app, ssl_context='adhoc')
