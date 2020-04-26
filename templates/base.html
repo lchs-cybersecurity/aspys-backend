@@ -19,11 +19,13 @@
       <img class='extension-logo' src="https://raw.githubusercontent.com/lchs-cybersecurity/veritas/master/assets/veritas.svg?sanitize=true" alt="Veritas">
       <span class='extension-name'>Veritas | Mission Control</span>
 
+      {% if url_for(request.endpoint) != '/' %}
       <span class="navbar">
         <a href="info" class="navbar-item">Info</a>
         <a href="browser" class="navbar-item">Reports</a>
         <a href="settings" class="navbar-item">Settings</a>
       </span>
+      {% endif %}
 
     </header>
 
