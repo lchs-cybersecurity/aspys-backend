@@ -6,10 +6,6 @@
 {% block content %}
 
     <div class="reports">
-    {% for bl_item in bl %} 
-        <div>{{ bl_item['address'] }}</div>
-    {% endfor %} 
-
     {% if data %} 
         <table>
             <tr class='reports-headers'>
@@ -53,7 +49,8 @@
                     <p class='report-title report-header'>Note:</p>
                     <p>{{ report['note'] }}</p>
                     <br>
-                    <button class='deleter-button' will-delete="{{ report['id'] }}">delete</button> 
+                    <button class='deleter-button' will-delete="{{ report['id'] }}">Delete Report</button> 
+                    <button class='blacklist-button' blacklists="{{ report['reportee'] }}">Blacklist Target</button>
                     <br><br>
                 </div>
             </div>
@@ -95,11 +92,37 @@
             }); 
         } 
 
+        function sendBlacklist(address) {
+            let request = $.ajax({
+                type: 'POST', 
+                url: "{{ url_for('blacklist_address') }}", 
+                contentType: 'application/json', 
+                dataType: 'json', 
+                data: JSON.stringify({
+                    address: address, 
+                })
+            }); 
+
+            request.done(function(msg) {
+                console.log(msg); 
+            }); 
+
+            request.fail(function( jqXHR, textStatus ) {
+                console.log(jqXHR)
+            }); 
+        }
+
         $('.deleter-button').click(function(e) { //le event for when you click dat delete button
             let id = this.getAttribute('will-delete'); //each of these buttons has this attribute, specifying which report to delete
 
             sendDelete(id); 
-        }) 
+        }); 
+
+        $('.blacklist-button').click(function(e) {
+            let address = this.getAttribute('blacklists'); 
+
+            sendBlacklist(address); 
+        })
         
         $('.full-report-toggle').click(function(e) { //when you click anywhere on the report header thing
             //console.log(this.children); 

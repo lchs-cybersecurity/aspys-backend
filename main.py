@@ -158,7 +158,7 @@ def blacklist_address():
 
     print(json) 
 
-    bdb.insert(json) 
+    bdb.upsert(json, ['address']) 
 
     return json, 200
 
@@ -174,7 +174,7 @@ def whitelist_address():
 
 @app.route("/get_blacklist") 
 def get_blacklist(): 
-    b1 = [item['address'] for item in bdb.distinct('address')] 
+    b1 = [item['address'] for item in bdb.all()] 
 
     return {
         'data': b1, 
