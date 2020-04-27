@@ -39,7 +39,9 @@ app.secret_key = config["secret_key"]
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 db = dataset.connect('sqlite:///reports.db')
-rdb = db.get_table('reports')
+rdb = db.get_table('reports') 
+bdb = db.get_table('blacklist') 
+wdb = db.get_table('whitelist') 
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -146,9 +148,41 @@ def delete_item():
 
     print(json)  
 
-    rdb.delete(timestamp=json.get('timestamp')) 
+    rdb.delete(id=json.get('id')) 
 
     return json, 200
+
+@app.route("/blacklist", methods=['POST', 'PUT']) 
+def blacklist_address(): 
+    json = request.get_json() 
+
+    print(json) 
+
+    bdb.insert(json) 
+
+    return json, 200
+
+@app.route("/whitelist", methods=['POST', 'PUT']) 
+def whitelist_address(): 
+    json = request.get_json() 
+
+    print(json) 
+
+    wdb.insert(json) 
+
+    return json, 200
+
+@app.route("/get_blacklist") 
+def get_blacklist(): 
+    b1 = [item['address'] for item in bdb.distinct('address')] 
+
+    return {
+        'data': b1, 
+    } 
+
+@app.route("/favicon.ico") 
+def favicon(): 
+    return {}, 200
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -167,8 +201,10 @@ def display_login():
 @app.route("/browser")
 @login_required
 def display_browser():
-    data = rdb.all()
-    return render_template("reportbrowser.html", data=data)
+    data = rdb.all() 
+    bl = bdb.all() 
+
+    return render_template("reportbrowser.html", data=data, bl=bl) 
 
 # @app.route("/browser/<receiver>")
 # def display_browser(receiver):

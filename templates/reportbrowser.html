@@ -6,6 +6,10 @@
 {% block content %}
 
     <div class="reports">
+    {% for bl_item in bl %} 
+        <div>{{ bl_item['address'] }}</div>
+    {% endfor %} 
+
     {% if data %} 
         <table>
             <tr class='reports-headers'>
@@ -15,8 +19,8 @@
             </tr>
         </table>
         {% for report in data %} 
-            <div id="report-at-{{ report['timestamp'] }}">
-                <div class='full-report-toggle' toggles="{{ report['timestamp'] }}">
+            <div id="report-at-{{ report['id'] }}">
+                <div class='full-report-toggle' toggles="{{ report['id'] }}">
                     <table>
                         <tr class='reports-row'>
                             <th width=200>
@@ -31,7 +35,7 @@
                         </tr>
                     </table>
                 </div> 
-                <div class='full-report hidden' id="full-report-{{ report['timestamp'] }}">
+                <div class='full-report hidden' id="full-report-{{ report['id'] }}">
                     <br>
                     <div class='report-header'>
                         <span class='report-title'>Author:</span><span> {{ report['reporter'] }}</span> 
@@ -49,7 +53,7 @@
                     <p class='report-title report-header'>Note:</p>
                     <p>{{ report['note'] }}</p>
                     <br>
-                    <button class='deleter-button' will-delete="{{ report['timestamp'] }}">delete</button> 
+                    <button class='deleter-button' will-delete="{{ report['id'] }}">delete</button> 
                     <br><br>
                 </div>
             </div>
@@ -68,7 +72,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="{{ url_for('static',filename='js/reportbrowser.js') }}"></script>
     <script>
-        function sendDelete(timestamp) {
+        function sendDelete(id) {
             //makes the request
             let request = $.ajax({
                 type: "POST",
@@ -76,14 +80,14 @@
                 contentType: "application/json", 
                 dataType: "json",
                 data: JSON.stringify({
-                    timestamp: timestamp, 
+                    id: id, 
                 }),  
             }); 
 
             request.done(function( msg ) { //success
                 console.log(msg) //console logs
 
-                $(`#report-at-${timestamp}`).prop('hidden', true); //hides the html element that corresponds to the report
+                $(`#report-at-${id}`).prop('hidden', true); //hides the html element that corresponds to the report
             }); 
 
             request.fail(function( jqXHR, textStatus ) {
@@ -92,9 +96,9 @@
         } 
 
         $('.deleter-button').click(function(e) { //le event for when you click dat delete button
-            let timestamp = this.getAttribute('will-delete'); //each of these buttons has this attribute, specifying which report to delete
+            let id = this.getAttribute('will-delete'); //each of these buttons has this attribute, specifying which report to delete
 
-            sendDelete(timestamp); 
+            sendDelete(id); 
         }) 
         
         $('.full-report-toggle').click(function(e) { //when you click anywhere on the report header thing
