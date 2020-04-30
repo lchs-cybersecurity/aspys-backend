@@ -20,6 +20,8 @@ from werkzeug.serving import run_simple
 from login_utils import CredentialsManager
 from other_utils import *
 
+
+
 # Load config
 with open("config.json", "r+", encoding="utf-8") as config_file:
     config = dict(json_load(config_file))
@@ -172,7 +174,7 @@ def whitelist_address():
 
     return json, 200
 
-@app.route("/get_blacklist") 
+@app.route("/api/get_blacklist") 
 def get_blacklist(): 
     b1 = [item['address'] for item in bdb.all()] 
 
