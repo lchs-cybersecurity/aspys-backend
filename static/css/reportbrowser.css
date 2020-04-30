@@ -12,6 +12,10 @@
   background-color: #ffffffd0;
 } 
 
+.report-space {
+  height: 40px; 
+}
+
 .contents-container {
   text-align: center; 
   vertical-align: middle;

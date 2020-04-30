@@ -32,15 +32,19 @@
                     </table>
                 </div> 
                 <div class='full-report hidden' id="full-report-{{ report['id'] }}">
-                    <br>
+                    <button class='deleter-button' will-delete="{{ report['id'] }}">Delete Report</button> 
+                    <button class='blacklist-button' blacklists="{{ report['reportee'] }}">Blacklist Target</button>
+
+                    <p class='report-space'>
+
                     <div class='report-header'>
-                        <span class='report-title'>Author:</span><span> {{ report['reporter'] }}</span> 
+                        <span class='report-title'>Reporter:</span><span> {{ report['reporter'] }}</span> 
                     </div>
                     <div class='report-header'>
-                        <span class='report-title'>Target:</span><span> {{ report['reportee'] }}</span> 
+                        <span class='report-title'>Reportee:</span><span> {{ report['reportee'] }}</span> 
                     </div>
                     <div class='report-header'>
-                        <span class='report-title'>Time:</span><span> {{ report['timestamp'] }}</span> 
+                        <span class='report-title'>Timestamp:</span><span> {{ report['timestamp'] }}</span> 
                     </div>
                     <br>
                     <p class='report-title report-header'>Body:</p>
@@ -48,10 +52,6 @@
                     <br>
                     <p class='report-title report-header'>Note:</p>
                     <p>{{ report['note'] }}</p>
-                    <br>
-                    <button class='deleter-button' will-delete="{{ report['id'] }}">Delete Report</button> 
-                    <button class='blacklist-button' blacklists="{{ report['reportee'] }}">Blacklist Target</button>
-                    <br><br>
                 </div>
             </div>
         {% endfor %}
