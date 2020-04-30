@@ -44,7 +44,7 @@
                     </div>
                     <br>
                     <p class='report-title report-header'>Body:</p>
-                    <p>{{ report['body'] }}</p>
+                    <p>{{ report['body']|safe }}</p>
                     <br>
                     <p class='report-title report-header'>Note:</p>
                     <p>{{ report['note'] }}</p>
