@@ -22,7 +22,7 @@
       <img class='extension-logo' src="../static/assets/icon-128.png">
       <span class='extension-name'>Veritas | Mission Control</span>
 
-      {% if url_for(request.endpoint) != '/' %}
+      {% if not request.endpoint or url_for(request.endpoint) != '/' %}
       <span class="navbar">
         <a href="info" class="navbar-item">Info</a>
         <a href="browser" class="navbar-item">Reports</a>
