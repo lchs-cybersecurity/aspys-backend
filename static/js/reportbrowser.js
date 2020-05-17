@@ -44,7 +44,7 @@ function sendBlacklist(address) {
 function createPopup($this) {
     const href = $this.attr('href'); // gets the href of the a element
 
-    $this.addClass('highlighted-link'); 
+    $this.addClass('highlighted-link'); // it highlights the link in a cool border so you know the popup is about that one
 
     let el = $(`
     <div class="veritas-link-confirm">
@@ -63,14 +63,14 @@ function createPopup($this) {
 
     el.find('.veritas-cancel').click(function(e) { // when you click the cancel button
         el.remove(); 
-        $this.removeClass('highlighted-link'); 
+        $this.removeClass('highlighted-link'); // removes the cool border
     }); 
 
     el.find('.veritas-proceed').click(function(e) { //when you click the proceed button
         window.open(href); 
 
         el.remove(); 
-        $this.removeClass('highlighted-link'); 
+        $this.removeClass('highlighted-link'); // removes the cool border
     })
 }
 
