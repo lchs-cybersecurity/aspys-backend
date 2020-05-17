@@ -60,6 +60,7 @@
     font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif; 
     margin: 20px; 
     text-align: left; 
+    line-height: normal;
 } 
 
 .link-confirm-href {
