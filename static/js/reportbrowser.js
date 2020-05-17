@@ -46,7 +46,7 @@ function createPopup($this) {
 
     $this.addClass('highlighted-link'); // it highlights the link in a cool border so you know the popup is about that one
 
-    let el = $(`
+    let popup = $(`
     <div class="veritas-link-confirm">
         <div class="veritas-icon"></div>
         <p class='link-confirm-text'>Since this is a potential phising email, the links may lead to malicious sites! Proceed with caution. This link goes to: </p>
@@ -59,18 +59,24 @@ function createPopup($this) {
     </div>
     `); // creates the popup element
     
-    el.insertAfter($this); // places it after the a element
+    popup.insertAfter($this); // places it after the a element
 
-    el.find('.veritas-cancel').click(function(e) { // when you click the cancel button
-        el.remove(); 
+    popup.find('.veritas-cancel').click(function(e) { // when you click the cancel button
+        popup.remove(); 
         $this.removeClass('highlighted-link'); // removes the cool border
+
+        e.preventDefault(); // prevents the click from opening the link (the default behavior) 
+        e.stopPropagation(); // prevents the event from propagating up the DOM tree
     }); 
 
-    el.find('.veritas-proceed').click(function(e) { // when you click the proceed button
+    popup.find('.veritas-proceed').click(function(e) { // when you click the proceed button
         window.open(href); 
 
-        el.remove(); 
+        popup.remove(); 
         $this.removeClass('highlighted-link'); // removes the cool border
+
+        e.preventDefault(); // prevents the click from opening the link (the default behavior) 
+        e.stopPropagation(); // prevents the event from propagating up the DOM tree
     })
 }
 
@@ -82,15 +88,16 @@ function neuterLinks() {
     as.click(function(e) {
         let $this = $(this); 
 
-        e.preventDefault(); // prevents the click from opening the link (the default behavior) 
-
         const next = $this.next('.veritas-link-confirm'); // does it already have a corresponding popup? 
 
         //console.log(next); 
 
         if (!next.length) { // if not, create one
             createPopup($this); 
-        }
+        } 
+
+        e.preventDefault(); // prevents the click from opening the link (the default behavior) 
+        e.stopPropagation(); // prevents the event from propagating up the DOM tree
     })
 } 
 

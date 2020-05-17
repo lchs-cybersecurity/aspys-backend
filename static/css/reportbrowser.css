@@ -59,6 +59,7 @@
     padding: 20px;
     font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif; 
     margin: 20px; 
+    text-align: left; 
 } 
 
 .link-confirm-href {
