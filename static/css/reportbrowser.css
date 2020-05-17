@@ -58,8 +58,13 @@
     max-width: 1200px;
     padding: 20px;
     font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif; 
+    margin: 20px; 
 } 
 
 .link-confirm-href {
   color: #00aa77; 
+} 
+
+.highlighted-link {
+  border: solid 4px #00bb6d; 
 }
