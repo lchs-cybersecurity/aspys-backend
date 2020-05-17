@@ -49,7 +49,7 @@ function createPopup($this) {
     let popup = $(`
     <div class="veritas-link-confirm">
         <div class="veritas-icon"></div>
-        <p class='link-confirm-text'>Since this is a potential phising email, the links may lead to malicious sites! Proceed with caution. This link goes to: </p>
+        <p class='link-confirm-text'>Since this is a potential phishing email, the links may lead to malicious sites! Proceed with caution. This link goes to: </p>
         <p class='link-confirm-href'>${href}</p> 
         </br>
         <div class="veritas-buttons">
