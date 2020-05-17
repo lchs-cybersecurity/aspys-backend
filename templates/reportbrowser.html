@@ -48,7 +48,7 @@
                     </div>
                     <br>
                     <p class='report-title report-header'>Body:</p>
-                    <p>{{ report['body']|safe }}</p>
+                    <div class='report-body'>{{ report['body']|safe }}</div>
                     <br>
                     <p class='report-title report-header'>Note:</p>
                     <p>{{ report['note'] }}</p>
@@ -110,6 +110,55 @@
             request.fail(function( jqXHR, textStatus ) {
                 console.log(jqXHR)
             }); 
+        } 
+
+        function createPopup($this) {
+            const href = $this.attr('href'); // gets the href of the a element
+
+            let el = $(`
+            <div class="veritas-link-confirm">
+                <div class="veritas-icon"></div>
+                <p class='link-confirm-text'>Since this is a potential phising email, the links may lead to malicious sites! Proceed with caution. This link goes to: </p>
+                <p class='link-confirm-href'>${href}</p> 
+                </br>
+                <div class="veritas-buttons">
+                    <button class="veritas-cancel">Cancel</button>
+                    <button class="veritas-proceed">Proceed</button>
+                </div>
+            </div>
+            `); // creates the popup element
+            
+            el.insertAfter($this); // places it after the a element
+
+            el.find('.veritas-cancel').click(function(e) { // when you click the cancel button
+                el.remove(); 
+            }); 
+
+            el.find('.veritas-proceed').click(function(e) { //when you click the proceed button
+                window.open(href); 
+
+                el.remove(); 
+            })
+        }
+
+        function neuterLinks() {
+            let as = $('.report-body').find('a'); // finds all the a elements in each report body
+
+            //console.log(as); 
+
+            as.click(function(e) {
+                let $this = $(this); 
+
+                e.preventDefault(); // prevents the click from opening the link (the default behavior) 
+
+                const next = $this.next('.veritas-link-confirm'); // does it already have a corresponding popup? 
+
+                //console.log(next); 
+
+                if (!next.length) { // if not, create one
+                    createPopup($this); 
+                }
+            })
         }
 
         $('.deleter-button').click(function(e) { //le event for when you click dat delete button
@@ -130,5 +179,7 @@
 
             $(`#full-report-${id}`).slideToggle(); //toggles the s l i d e
         }); 
+
+        neuterLinks(); 
     </script>
 {% endblock %}

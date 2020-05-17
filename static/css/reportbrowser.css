@@ -43,4 +43,23 @@
 
 .hidden {
   display: none; 
+} 
+
+.veritas-link-confirm {
+    animation: fadeIn ease 1s;
+    font-size: 18px; 
+    color: #000000; 
+    position: absolute;
+    z-index: 999; 
+    background-color: #ffffff;
+    border: solid 4px #00bb6d;
+    border-radius: 10px; 
+    overflow-wrap: anywhere;
+    max-width: 1200px;
+    padding: 20px;
+    font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif; 
+} 
+
+.link-confirm-href {
+  color: #00aa77; 
 }
