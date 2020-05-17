@@ -66,7 +66,7 @@ function createPopup($this) {
         $this.removeClass('highlighted-link'); // removes the cool border
     }); 
 
-    el.find('.veritas-proceed').click(function(e) { //when you click the proceed button
+    el.find('.veritas-proceed').click(function(e) { // when you click the proceed button
         window.open(href); 
 
         el.remove(); 
