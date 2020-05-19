@@ -8,7 +8,7 @@ La Cañada Cybersecurity Club
 from flask import Flask, request, render_template, redirect, session
 from flask.json import jsonify
 from flask_cors import CORS
-from flask_login import LoginManager, UserMixin, login_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
 import dataset
 import requests
 from json import load as json_load, dumps as json_dumps
@@ -37,10 +37,16 @@ app.config['TESTING'] = False
 app.secret_key = config["secret_key"]
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-db = dataset.connect('sqlite:///reports.db')
-rdb = db.get_table('reports') 
-bdb = db.get_table('blacklist') 
-wdb = db.get_table('whitelist') 
+# Load databases
+
+# db = dataset.connect('sqlite:///reports.db')
+# rdb = db.get_table('reports') 
+# bdb = db.get_table('blacklist') 
+# wdb = db.get_table('whitelist') 
+
+rdb = dataset.connect('sqlite:///reports.db')
+bdb = dataset.connect('sqlite:///blacklists.db')
+wdb = dataset.connect('sqlite:///whitelists.db')
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -50,23 +56,29 @@ login_manager.init_app(app)
 active_users = []
 class User(UserMixin):
     userid = ""
-    
+    org_id = ""
+
     def __init__(self, new_id: str):
         self.userid = new_id
     
     def get_id(self):
         return self.userid
 
+    def set_org_id(self, new_org_id):
+        self.org_id = new_org_id
+
 @login_manager.user_loader
 def load_user(userid: str):
-    # return active_users[int(userid)]
-    return User(userid)
+    try:
+        return active_users[int(userid)]
+    except IndexError:
+        return User(userid)
 
 
 # Load salter-hasher
 credman = load_credentialsmanager()
 
-# Load or create hashed credentials list (janky CLI way)
+# Load organizations
 organizations = []
 logins = load_organizations()
 
@@ -75,8 +87,9 @@ logins = load_organizations()
 @app.route("/api/report", methods=['POST', 'PUT'])
 def handle_report():
     data = request.get_json()['data']
+    org_id = request.get_json()['org_id']
     data['timestamp'] = now()
-    rdb.insert(data)
+    rdb[org_id].insert(data)
     return data, 200 # 200 indicates success to client
 
 
@@ -84,8 +97,8 @@ def handle_report():
 def handle_feedback():
     data = request.get_json()['data']
     data['timestamp'] = now()
-    fdb = db.get_table('feedback')
-    fdb.insert(data)
+    # fdb = db.get_table('feedback')
+    # fdb.insert(data)
     tryDiscordSend(request.get_json()['discord'])
     return data, 200
 
@@ -94,8 +107,8 @@ def handle_feedback():
 def handle_bug():
     data = request.get_json()['data']
     data['timestamp'] = now()
-    bdb = db.get_table('bugs')
-    bdb.insert(data)
+    # bdb = db.get_table('bugs')
+    # bdb.insert(data)
     tryDiscordSend(request.get_json()['discord'])
     return data, 200
 
@@ -107,48 +120,50 @@ def handle_login():
     for login in logins:
         if username == login["user"] and credman.sh_pw(password) == login["sh_pw"]:
             user = User(str(len(active_users)))
+            user.set_org_id(login["id"])
             active_users.append(user)
             login_user(user)
             print(f"Logged in user {username}.")
             return redirect("/browser")
-        else:
-            print("Login failed.")
-            return redirect("/")
+    print("Login failed.")
+    return redirect("/")
 
 
-@app.route("/delete", methods=['POST', 'PUT']) # per-org
+@app.route("/delete", methods=['POST', 'PUT'])
 def delete_item(): 
     json = request.get_json() 
 
     print(json)  
 
-    rdb.delete(id=json.get('id')) 
+    rdb[json.get('org_id')].delete(id=json.get('id')) 
 
     return json, 200
 
-@app.route("/blacklist", methods=['POST', 'PUT']) # per-org
+@app.route("/blacklist", methods=['POST', 'PUT'])
 def blacklist_address(): 
     json = request.get_json() 
 
     print(json) 
 
-    bdb.upsert(json, ['address']) 
+    bdb[json.get('org_id')].upsert(json, ['address']) 
 
     return json, 200
 
-@app.route("/whitelist", methods=['POST', 'PUT']) # per-org
+@app.route("/whitelist", methods=['POST', 'PUT'])
 def whitelist_address(): 
     json = request.get_json() 
 
     print(json) 
 
-    wdb.insert(json) 
+    wdb[json.get('org_id')].insert(json) 
 
     return json, 200
 
-@app.route("/api/get_blacklist") # per-org
+@app.route("/api/get_blacklist")
 def get_blacklist(): 
-    b1 = [item['address'] for item in bdb.all()] 
+    json = request.get_json()
+
+    b1 = [item['address'] for item in bdb[json.get('org_id')].all()] 
 
     return {
         'data': b1, 
@@ -174,8 +189,10 @@ def display_login():
 @app.route("/browser")
 @login_required
 def display_browser():
-    data = rdb.all() 
-    bl = bdb.all() 
+    org_id = current_user.org_id
+
+    data = rdb[org_id].all() 
+    bl = bdb[org_id].all() 
 
     return render_template("reportbrowser.html", data=data, bl=bl) 
 
