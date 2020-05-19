@@ -11,16 +11,13 @@ from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required
 import dataset
 import requests
-from pickle import dump as pkl_dump, load as pkl_load
 from json import load as json_load, dumps as json_dumps
 from getpass import getpass
 from os import urandom
 from werkzeug.serving import run_simple
 
-from login_utils import CredentialsManager
+from login_utils import load_credentialsmanager, load_organizations
 from other_utils import *
-
-
 
 # Load config
 with open("config.json", "r+", encoding="utf-8") as config_file:
@@ -67,36 +64,11 @@ def load_user(userid: str):
 
 
 # Load salter-hasher
-try:
-    with open("data/credman.pkl", "rb") as credman_file:
-        credman = pkl_load(credman_file)
-except FileNotFoundError:
-    credman = CredentialsManager()
-    with open("data/credman.pkl", "wb+") as credman_file:
-        pkl_dump(credman, credman_file)
+credman = load_credentialsmanager()
 
 # Load or create hashed credentials list (janky CLI way)
-# TODO: Maybe make user-add page at some point :/
-try:
-    with open("data/logins.json", "r") as logins_file:
-        logins = json_load(logins_file)
-
-except FileNotFoundError:
-    logins = []
-    print("No users found. Please create a user.")
-    username = input("Username: ")
-    while True:
-        password = getpass("Password: ")
-        password_confirm = getpass("Confirm password: ")
-        if password == password_confirm:
-            break
-        else:
-            print("Passwords did not match. Please try again.")
-    logins.append((username, credman.sh_pw(password)))
-    print(f"User {username} added.")
-    with open("data/logins.json", "w+") as logins_file:
-        logins_file.write(json_dumps(logins))
-
+organizations = []
+logins = load_organizations()
 
 # --- Server Listener actions ---
 
@@ -108,7 +80,7 @@ def handle_report():
     return data, 200 # 200 indicates success to client
 
 
-@app.route("/api/feedback", methods=['POST', 'PUT'])
+@app.route("/api/feedback", methods=['POST', 'PUT']) # keep as is
 def handle_feedback():
     data = request.get_json()['data']
     data['timestamp'] = now()
@@ -118,7 +90,7 @@ def handle_feedback():
     return data, 200
 
 
-@app.route("/api/bug", methods=['POST', 'PUT'])
+@app.route("/api/bug", methods=['POST', 'PUT']) # keep as is
 def handle_bug():
     data = request.get_json()['data']
     data['timestamp'] = now()
@@ -133,7 +105,7 @@ def handle_login():
     username = request.form.get("username")
     password = request.form.get("password")
     for login in logins:
-        if username == login[0] and credman.sh_pw(password) == login[1]:
+        if username == login["user"] and credman.sh_pw(password) == login["sh_pw"]:
             user = User(str(len(active_users)))
             active_users.append(user)
             login_user(user)
@@ -144,7 +116,7 @@ def handle_login():
             return redirect("/")
 
 
-@app.route("/delete", methods=['POST', 'PUT'])
+@app.route("/delete", methods=['POST', 'PUT']) # per-org
 def delete_item(): 
     json = request.get_json() 
 
@@ -154,7 +126,7 @@ def delete_item():
 
     return json, 200
 
-@app.route("/blacklist", methods=['POST', 'PUT']) 
+@app.route("/blacklist", methods=['POST', 'PUT']) # per-org
 def blacklist_address(): 
     json = request.get_json() 
 
@@ -164,7 +136,7 @@ def blacklist_address():
 
     return json, 200
 
-@app.route("/whitelist", methods=['POST', 'PUT']) 
+@app.route("/whitelist", methods=['POST', 'PUT']) # per-org
 def whitelist_address(): 
     json = request.get_json() 
 
@@ -174,7 +146,7 @@ def whitelist_address():
 
     return json, 200
 
-@app.route("/api/get_blacklist") 
+@app.route("/api/get_blacklist") # per-org
 def get_blacklist(): 
     b1 = [item['address'] for item in bdb.all()] 
 
@@ -182,7 +154,7 @@ def get_blacklist():
         'data': b1, 
     } 
 
-@app.route("/favicon.ico") 
+@app.route("/favicon.ico")
 def favicon(): 
     return {}, 200
 
@@ -199,7 +171,6 @@ def display_info():
 def display_login():
     return render_template("login.html")
 
-# NOTE: Currently single-organization, but that may be subject to change
 @app.route("/browser")
 @login_required
 def display_browser():
@@ -207,11 +178,5 @@ def display_browser():
     bl = bdb.all() 
 
     return render_template("reportbrowser.html", data=data, bl=bl) 
-
-# @app.route("/browser/<receiver>")
-# def display_browser(receiver):
-#     # data = rdb.find(receiver=receiver)
-#     data = rdb.all()
-#     return render_template("reportbrowser.html", data=data)
 
 run_simple('0.0.0.0', LISTEN_PORT, app, ssl_context='adhoc')
