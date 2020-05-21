@@ -46,7 +46,7 @@
 } 
 
 .veritas-link-confirm {
-    animation: fadeIn ease 1s;
+    animation: fadeIn ease 0.3s;
     font-size: 18px; 
     color: #000000; 
     position: absolute;
