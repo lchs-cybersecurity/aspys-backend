@@ -6,14 +6,24 @@
   color: #ffffff;
   border: none;
   background: linear-gradient(135deg, #00a558 0%, #007994 100%);
+
+  /* Disable text selection */
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
 }
 
 .reports-row {
   background-color: #ffffffd0;
+  
+  /* Disable text selection */
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
 } 
 
 .report-space {
-  height: 40px; 
+  height: 20px; 
 }
 
 .contents-container {

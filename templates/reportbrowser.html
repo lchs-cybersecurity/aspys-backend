@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Report Browser{% endblock %}
+{% block title %}Email Reports{% endblock %}
 
 {% block content_class %}full{% endblock %}
 {% block content %}
@@ -35,7 +35,7 @@
                     <button class='deleter-button' will-delete="{{ report['id'] }}">Delete Report</button> 
                     <button class='blacklist-button' blacklists="{{ report['reportee'] }}">Blacklist Target</button>
 
-                    <p class='report-space'>
+                    <div class='report-space'></div>
 
                     <div class='report-header'>
                         <span class='report-title'>Reporter:</span><span> {{ report['reporter'] }}</span> 
