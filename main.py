@@ -196,4 +196,13 @@ def display_browser():
 
     return render_template("reportbrowser.html", data=data, bl=bl) 
 
+@app.route("/settings")
+@login_required
+def display_settings():
+    org_id = current_user.org_id
+    wl = wdb[org_id].all()
+    bl = bdb[org_id].all()
+
+    return render_template("settings.html", wl=wl, bl=bl)
+
 run_simple('0.0.0.0', LISTEN_PORT, app, ssl_context='adhoc')
