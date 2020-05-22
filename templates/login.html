@@ -16,9 +16,8 @@
             </li>
         </ul>
 
-        <!-- Change to something stylish -->
-        {% if failed %}
-            <p><h3 style="color:red">Login failed.</h3></p>
+        {% if error %}
+            <p class="red">{{ error }}</p>
         {% endif %}
 
         <div class="centered">

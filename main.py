@@ -113,7 +113,7 @@ def handle_bug():
     return data, 200
 
 
-@app.route("/handle_login", methods=['POST'])
+@app.route("/login", methods=['POST'])
 def handle_login():
     username = request.form.get("username")
     password = request.form.get("password")
@@ -123,10 +123,8 @@ def handle_login():
             user.set_org_id(login["id"])
             active_users.append(user)
             login_user(user)
-            print(f"Logged in user {username}.")
             return redirect("/browser")
-    print("Login failed.")
-    return redirect("/")
+    return render_template("login.html", error='Check the orgainzation username and/or password.')
 
 
 @app.route("/delete", methods=['POST', 'PUT'])
@@ -177,12 +175,15 @@ def favicon():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-
 @app.route("/info")
 def display_info():
     return render_template("info.html")
 
 @app.route("/")
+def display_default():
+    return render_template("login.html")
+
+@app.route("/login")
 def display_login():
     return render_template("login.html")
 
@@ -195,5 +196,6 @@ def display_browser():
     bl = bdb[org_id].all() 
 
     return render_template("reportbrowser.html", data=data, bl=bl) 
+
 
 run_simple('0.0.0.0', LISTEN_PORT, app, ssl_context='adhoc')
