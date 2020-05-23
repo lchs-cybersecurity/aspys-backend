@@ -40,9 +40,9 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # Load databases
 
 # db = dataset.connect('sqlite:///reports.db')
-# rdb = db.get_table('reports') 
-# bdb = db.get_table('blacklist') 
-# wdb = db.get_table('whitelist') 
+# rdb = db.get_table('reports')
+# bdb = db.get_table('blacklist')
+# wdb = db.get_table('whitelist')
 
 rdb = dataset.connect('sqlite:///reports.db')
 bdb = dataset.connect('sqlite:///blacklists.db')
@@ -60,7 +60,7 @@ class User(UserMixin):
 
     def __init__(self, new_id: str):
         self.userid = new_id
-    
+
     def get_id(self):
         return self.userid
 
@@ -128,47 +128,47 @@ def handle_login():
 
 
 @app.route("/delete", methods=['POST', 'PUT'])
-def delete_item(): 
-    json = request.get_json() 
+def delete_item():
+    json = request.get_json()
 
-    print(json)  
+    print(json)
 
-    rdb[json.get('org_id')].delete(id=json.get('id')) 
+    rdb[json.get('org_id')].delete(id=json.get('id'))
 
     return json, 200
 
 @app.route("/blacklist", methods=['POST', 'PUT'])
-def blacklist_address(): 
-    json = request.get_json() 
+def blacklist_address():
+    json = request.get_json()
 
-    print(json) 
+    print(json)
 
-    bdb[json.get('org_id')].upsert(json, ['address']) 
+    bdb[json.get('org_id')].upsert(json, ['address'])
 
     return json, 200
 
 @app.route("/whitelist", methods=['POST', 'PUT'])
-def whitelist_address(): 
-    json = request.get_json() 
+def whitelist_address():
+    json = request.get_json()
 
-    print(json) 
+    print(json)
 
-    wdb[json.get('org_id')].insert(json) 
+    wdb[json.get('org_id')].insert(json)
 
     return json, 200
 
 @app.route("/api/get_blacklist")
-def get_blacklist(): 
+def get_blacklist():
     json = request.get_json()
 
-    b1 = [item['address'] for item in bdb[json.get('org_id')].all()] 
+    b1 = [item['address'] for item in bdb[json.get('org_id')].all()]
 
     return {
-        'data': b1, 
-    } 
+        'data': b1,
+    }
 
 @app.route("/favicon.ico")
-def favicon(): 
+def favicon():
     return {}, 200
 
 @app.errorhandler(404)
@@ -192,10 +192,18 @@ def display_login():
 def display_browser():
     org_id = current_user.org_id
 
-    data = rdb[org_id].all() 
-    bl = bdb[org_id].all() 
+    data = rdb[org_id].all()
+    bl = bdb[org_id].all()
 
-    return render_template("reportbrowser.html", data=data, bl=bl) 
+    return render_template("reportbrowser.html", data=data, bl=bl)
 
+@app.route("/settings")
+@login_required
+def display_settings():
+    org_id = current_user.org_id
+    wl = wdb[org_id].all()
+    bl = bdb[org_id].all()
+
+    return render_template("settings.html", wl=wl, bl=bl)
 
 run_simple('0.0.0.0', LISTEN_PORT, app, ssl_context='adhoc')
