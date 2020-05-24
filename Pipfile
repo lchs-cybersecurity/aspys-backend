@@ -13,6 +13,9 @@ waitress = ">=1.4.0"
 pytz = "*"
 dataset = "*"
 requests = "*"
+pandas = "*"
+tld = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.7"
