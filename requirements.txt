@@ -6,3 +6,6 @@ pytz>=2019.3
 requests>=2.23.0
 Werkzeug>=1.0.0
 pyOpenSSL>=18.0.0
+pandas
+tld
+cryptography
