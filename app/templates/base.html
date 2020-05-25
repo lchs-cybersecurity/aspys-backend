@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    {% assets "common_css" %}
+      <link href="{{ ASSET_URL }}" rel="stylesheet" type="text/css">
+    {% endassets %}
+
+    {% block css %}{% endblock %}
+
+    <title>{% block title %}{% endblock %} | Veritas</title>
+  </head>
+
+  <body>
+    {% block body %}{% endblock %}
+  </body>
+
+  {% block js %}{% endblock %}
+ 
+</html>

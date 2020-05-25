@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <header>
+      <img class="logo-icon" src="../static/img/icon-128.png">
+      <span class="logo-name">Veritas | Mission Control</span>
+
+      <!-- 
+        Probably just pass whether the user is logged in or not ???
+        - Trinity
+       -->
+      {% if not request.endpoint or url_for(request.endpoint) != '/' %}
+        {% include 'nav.html' %}
+      {% endif %}
+
+    </header>
+
+    <div class="contents {% block content_class %}{% endblock %}">
+      <h1>{% block title %}{% endblock %}</h1>
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- {% include 'footer.html' %} -->
+
+{% endblock %}

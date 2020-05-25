@@ -16,6 +16,10 @@ requests = "*"
 pandas = "*"
 tld = "*"
 cryptography = "*"
+python-dotenv = "*"
+flask-assets = "*"
+cssmin = "*"
+jsmin = "*"
 
 [requires]
 python_version = "3.7"

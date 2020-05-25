@@ -1,15 +1,8 @@
-from datetime import datetime, timedelta
-import pytz
-import requests
 from json import load as json_load
+from .functions import now, limit_str
+import requests
 
-def now():
-    return datetime.now(pytz.utc)
-
-def limit_str(str, chars):
-    return str[:chars-3] + (str[chars-3:] and "...")
-
-def tryDiscordSend(data):
+def try_discord_send(data):
     try:
         with open("config.json", "r") as config_file:
             config = json_load(config_file)

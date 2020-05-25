@@ -1,4 +1,4 @@
-from * import rate_risk
+from rate_risk import rate_link, rate_email
 
 def test_rate_link():
     print('Testing rate_link')
@@ -13,4 +13,8 @@ def test_rate_link():
         rating = rate_link(link)
         print(f'{rating}\t{expected}\t{link}')
 
+def test_rate_email():
+    print('Testing rate_email')
+
 test_rate_link()
+test_rate_email()
