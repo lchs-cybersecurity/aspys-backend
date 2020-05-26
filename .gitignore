@@ -134,8 +134,11 @@ dmypy.json
 data/*
 !data/.gitkeep
 
-# testing stuff
-test.py
+# mac
 .DS_Store
+
+# pip
 Pipfile.lock
-config.json
+
+# large csv
+*.csv

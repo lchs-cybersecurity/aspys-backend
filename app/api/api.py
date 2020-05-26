@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from flask_cors import CORS
 from .utils.discord import try_discord_send
 from .utils.functions import now
+from .utils.rate_risk import rate_link
 from app.db import rdb, bdb, wdb
 
 
@@ -14,6 +15,13 @@ so we need to add a token/key check.
 - Trinity
 """
 cors = CORS(api_bp, resources={r"/api/*": {"origins": "*"}})
+
+
+@api_bp.route("/api/rate-risk/link", methods=['GET'])
+def rate_risk_link():
+    url = request.args.get('url')
+    return (rate_link(url))
+
 
 
 @api_bp.route("/api/report", methods=['POST', 'PUT'])
