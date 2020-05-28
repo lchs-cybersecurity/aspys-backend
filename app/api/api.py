@@ -4,6 +4,7 @@ from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
 from app.api.utils.rate_risk import rate_link
 from app.db import rdb, bdb, wdb
+from app.admin.utils.credentials import load_organizations
 
 
 api_bp = Blueprint('api_bp', __name__)
@@ -82,3 +83,12 @@ def whitelist_address():
     wdb[json.get('org_id')].insert(json)
     return json, 200
 
+@api_bp.route("/api/get_org", methods=['GET'])
+def get_organization():
+    json = request.get_json()
+    target_domain = json['address'].split("@")[1]
+    orgs = load_organizations()
+    for o in orgs:
+        if target_domain in o['domains']:
+            return o['id']
+    return ""
