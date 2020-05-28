@@ -1,8 +1,8 @@
 from flask import Blueprint, request
 from flask_cors import CORS
-from .utils.discord import try_discord_send
-from .utils.functions import now
-from .utils.rate_risk import rate_link
+from app.api.utils.discord import try_discord_send
+from app.api.utils.functions import now
+from app.api.utils.rate_risk import rate_link
 from app.db import rdb, bdb, wdb
 
 
