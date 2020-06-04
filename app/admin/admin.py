@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from .utils.login import try_login
 from app.db import rdb, wdb, bdb
 
@@ -29,6 +29,13 @@ def handle_login():
     if (success):
         return redirect("/browser")
     return render_template("login.html", error='Check the orgainzation username and/or password.')
+
+
+@admin_bp.route("/logout", methods=['GET'])
+@login_required
+def handle_logout():
+    logout_user()
+    return redirect(url_for("admin_bp.display_login"))
 
 
 @admin_bp.route("/info")

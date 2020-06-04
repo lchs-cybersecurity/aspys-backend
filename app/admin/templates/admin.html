@@ -9,7 +9,7 @@
         Probably just pass whether the user is logged in or not ???
         - Trinity
        -->
-      {% if not request.endpoint or url_for(request.endpoint) != '/' %}
+      {% if current_user.is_authenticated %}
         {% include 'nav.html' %}
       {% endif %}
 
