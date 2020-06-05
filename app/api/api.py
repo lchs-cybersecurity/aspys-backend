@@ -63,8 +63,8 @@ def delete_item():
 
 @api_bp.route("/api/blacklist", methods=['GET'])
 def get_blacklist():
-    json = request.get_json()
-    b1 = [item['address'] for item in bdb[json.get('org_id')].all()]
+    args = request.args
+    b1 = [item['address'] for item in bdb[args.get('org_id')].all()]
     return {
         'data': b1,
     }
