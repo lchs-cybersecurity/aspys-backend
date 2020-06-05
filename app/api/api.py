@@ -85,9 +85,12 @@ def whitelist_address():
 
 @api_bp.route("/api/get_org", methods=['GET'])
 def get_organization():
-    json = request.get_json()
-    target_domain = json['address'].split("@")[1]
-    orgs = load_organizations()
+    # json = request.get_json()
+    # target_domain = json['address'].split("@")[1]
+    # orgs = load_organizations()
+    args = request.args
+    target_domain = args.get('address').split("@")[1]
+    orgs = load_organizations
     for o in orgs:
         if target_domain in o['domains']:
             return o['id']
