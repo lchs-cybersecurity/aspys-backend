@@ -90,8 +90,16 @@ def get_organization():
     # orgs = load_organizations()
     args = request.args
     target_domain = args.get('address').split("@")[1]
-    orgs = load_organizations
+    orgs = load_organizations()  
+
+    ID = '' 
+
     for o in orgs:
         if target_domain in o['domains']:
-            return o['id']
-    return ""
+            ID = o['id'] 
+            
+            break 
+    
+    return {
+        'ID': ID, 
+    } 
