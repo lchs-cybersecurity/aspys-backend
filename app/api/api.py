@@ -103,3 +103,14 @@ def get_organization():
     return {
         'ID': ID, 
     } 
+
+@api_bp.route("/api/get_support_emails", methods=['GET'])
+def get_support_emails():
+    orgs = load_organizations()
+
+    for o in orgs:
+        if o['id'] == request.args['id']:
+            return {
+                'support_emails': o['support_emails']
+            }
+    return {}

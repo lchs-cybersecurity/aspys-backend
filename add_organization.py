@@ -29,11 +29,17 @@ while True:
 domains_str = input("Enter all user domains, separated by commas: ")
 domains = [i.strip() for i in domains_str.split(",")]
 
+support_emails_str = input(
+"""In the case of a backend failure, please enter the email address
+to which backup report emails should be sent (separated by commas): """)
+support_emails = [i.strip() for i in support_emails_str.split(",")]
+
 orgs.append({
     "user": username,
     "sh_pw": credman.sh_pw(password), 
     "id": gen_org_id([i["id"] for i in orgs]),
-    "domains": domains
+    "domains": domains,
+    "support_emails": support_emails
 })
 
 print(f"Adding {username}.")
