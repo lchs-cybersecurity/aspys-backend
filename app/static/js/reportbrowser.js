@@ -1,11 +1,14 @@
 function sendDelete(id) {
+    console.log(org_id); 
+    
     //makes the request
     let request = $.ajax({
         type: "POST",
-        url: "{{ url_for('delete_item') }}", 
+        url: urls.delete_item, 
         contentType: "application/json", 
         dataType: "json",
         data: JSON.stringify({
+            org_id: org_id, 
             id: id, 
         }),  
     }); 
@@ -24,10 +27,11 @@ function sendDelete(id) {
 function sendBlacklist(address) {
     let request = $.ajax({
         type: 'POST', 
-        url: "{{ url_for('blacklist_address') }}", 
+        url: urls.blacklist_address, 
         contentType: 'application/json', 
         dataType: 'json', 
         data: JSON.stringify({
+            org_id: org_id, 
             address: address, 
         })
     }); 

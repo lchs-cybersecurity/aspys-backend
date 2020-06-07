@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_cors import CORS
 from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
-from app.api.utils.rate_risk import rate_link
+#from app.api.utils.rate_risk import rate_link
 from app.db import rdb, bdb, wdb
 from app.admin.utils.credentials import load_organizations
 
@@ -102,7 +102,7 @@ def get_organization():
     
     return {
         'ID': ID, 
-    } 
+    }, 200
 
 @api_bp.route("/api/get_support_emails", methods=['GET'])
 def get_support_emails():
@@ -112,5 +112,5 @@ def get_support_emails():
         if o['id'] == request.args['id']:
             return {
                 'support_emails': o['support_emails']
-            }
+            }, 200
     return {}

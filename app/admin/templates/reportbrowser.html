@@ -67,5 +67,13 @@
 
 {% block js %}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        const urls = {
+            delete_item: "{{ url_for('api_bp.delete_item') }}", 
+            blacklist_address: "{{ url_for('api_bp.blacklist_address') }}", 
+        } 
+
+        const org_id = '{{ org_id }}'; 
+    </script>
     <script src="{{ url_for('static',filename='js/reportbrowser.js') }}"></script>
 {% endblock %}

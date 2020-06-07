@@ -4,11 +4,7 @@ from flask_login import login_required, current_user, logout_user
 from .utils.login import try_login
 from app.db import rdb, wdb, bdb
 
-admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static')
-
-@admin_bp.route("/favicon.ico")
-def favicon():
-    return {}, 200
+admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static') 
 
 
 @admin_bp.route("/")
@@ -51,7 +47,7 @@ def display_browser():
     data = rdb[org_id].all()
     bl = bdb[org_id].all()
 
-    return render_template("reportbrowser.html", data=data, bl=bl)
+    return render_template("reportbrowser.html", data=data, bl=bl, org_id=org_id)
 
 @admin_bp.route("/settings")
 @login_required
