@@ -6,7 +6,7 @@ from pickle import dump as pkl_dump, load as pkl_load
 import os.path
 
 def gen_salt():
-    charselect = ascii_letters+"0123456789!@#$%^&*"
+    charselect = ascii_letters+"0123456789"
     salt = ""
     for i in range(randint(5, 10)):
         salt += charselect[randint(0, len(charselect)-1)]
@@ -48,8 +48,10 @@ def load_credentialsmanager():
 def gen_org_id(already_taken: list):
     while True:
         identifier = ""
-        for i in range(10):
-            identifier += random_choose(ascii_letters)
+        available_chars = ascii_letters+"1234567890-+_=!@#$%^&*"
+        # MAYBE: αβλρθδ
+        for i in range(24):
+            identifier += random_choose(available_chars)
         if identifier not in already_taken:
             break
     return identifier
