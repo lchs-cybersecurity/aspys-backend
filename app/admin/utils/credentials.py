@@ -48,7 +48,7 @@ def load_credentialsmanager():
 def gen_org_id(already_taken: list):
     while True:
         identifier = ""
-        available_chars = ascii_letters+"1234567890-+_=!@#$%^&*"
+        available_chars = ascii_letters+"1234567890"
         # MAYBE: αβλρθδ
         for i in range(24):
             identifier += random_choose(available_chars)
