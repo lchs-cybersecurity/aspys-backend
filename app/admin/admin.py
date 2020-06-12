@@ -10,11 +10,15 @@ admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_f
 
 @admin_bp.route("/")
 def display_default():
+    if current_user.is_authenticated:
+        return redirect("/browser")
     return render_template("login.html")
 
 
 @admin_bp.route("/login")
 def display_login():
+    if current_user.is_authenticated:
+        return redirect("/browser")
     return render_template("login.html")
 
 
