@@ -1,7 +1,7 @@
 from hashlib import md5
 from string import ascii_letters
 from random import randint, choice as random_choose
-from json import load as json_load, dumps as json_dumps
+from json import load as json_load, dumps as json_dumps, dump as json_dump
 from pickle import dump as pkl_dump, load as pkl_load
 import os.path
 
@@ -69,6 +69,10 @@ def load_organizations():
         print("Created new organizations file. Run add_organization.py to add new organizations.")
         return []
 
+def write_organizations(orgs_dict: dict): 
+    path = rel_path("../data/organizations.json")
+    with open(path, "w+") as orgs_file:
+        json_dump(orgs_dict, orgs_file)
 
 def rel_path(string):
     return os.path.join(os.path.dirname(__file__), string)

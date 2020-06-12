@@ -6,6 +6,21 @@
 
 {% block content %}
 
+<form action="{{ url_for('admin_bp.write_settings') }}" method=post id="settings-form">
+    <ul class="fields">
+        <li>
+            <label for="support_emails">Emergency support emails (separated by commas)</label><br>
+            <textarea type="text" id="support_emails" name="support_emails"
+            style="width:500px;height:100">{{ support_emails_str }}</textarea>
+        </li>
+    </ul>
+
+    <div class="centered">
+        <button type="submit">Apply Changes</button>
+    </div>
+    
+</form>
+
 {% endblock %}
 
 {% block js %}
