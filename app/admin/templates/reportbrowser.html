@@ -14,7 +14,7 @@
                 <th width=500>Reportee</th>
             </tr>
         </table>
-        {% for report in data %} 
+        {% for report in data | reverse %} 
             <div id="report-at-{{ report['id'] }}">
                 <div class='full-report-toggle' toggles="{{ report['id'] }}">
                     <table>
