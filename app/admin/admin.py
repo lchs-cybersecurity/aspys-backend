@@ -78,6 +78,8 @@ def display_settings():
 @admin_bp.route("/settings", methods=['POST', 'PUT'])
 # @login_required
 def write_settings():
+    if not current_user.is_authenticated:
+        return 403
     orgs = load_organizations()
     org_id = current_user.org_id
 
@@ -97,4 +99,5 @@ def write_settings():
 
     write_organizations(orgs)
 
-    return render_template("settings.html")
+    # NOTE: Return a redirect for now, unless we want to reimplement/move stringification stuff later
+    return redirect("/settings")
