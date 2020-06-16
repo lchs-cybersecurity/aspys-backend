@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
 from flask_login import login_required, current_user, logout_user
-from .utils.login import try_login
+from .utils.login import try_login, logout_bak_sync, User
 from app.db import rdb, wdb, bdb
 from .utils.credentials import load_organizations, write_organizations
 
@@ -35,6 +35,7 @@ def handle_login():
 @admin_bp.route("/logout", methods=['GET'])
 @login_required
 def handle_logout():
+    logout_bak_sync(current_user)
     logout_user()
     return redirect(url_for("admin_bp.display_login"))
 
