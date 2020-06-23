@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_cors import CORS
 from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
-#from app.api.utils.rate_risk import rate_link
+from app.api.utils.rate_risk import rate_link
 from app.db import rdb, bdb, wdb
 from app.admin.utils.credentials import load_organizations
 
@@ -81,7 +81,7 @@ def set_blacklist():
     json = request.get_json() 
 
     print(json) 
-    
+
     org_id = json.get('org_id') 
     blacklist = [{
         'address': address, 
