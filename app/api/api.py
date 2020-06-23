@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_cors import CORS
 from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
-from app.api.utils.rate_risk import rate_link
+#from app.api.utils.rate_risk import rate_link
 from app.db import rdb, bdb, wdb
 from app.admin.utils.credentials import load_organizations
 
@@ -76,11 +76,59 @@ def blacklist_address():
     bdb[json.get('org_id')].upsert(json, ['address'])
     return json, 200
 
+@api_bp.route("/api/set_blacklist", methods=['POST', 'PUT']) 
+def set_blacklist(): 
+    json = request.get_json() 
+
+    print(json) 
+    
+    org_id = json.get('org_id') 
+    blacklist = [{
+        'address': address, 
+        'org_id': org_id, 
+    } for address in json['list']] 
+    
+    table = bdb[org_id] 
+
+    print(repr(blacklist)) 
+
+    table.delete() 
+
+    table.insert_many(blacklist) 
+
+    return json, 200
+
+@api_bp.route("/api/whitelist", methods=['GET'])
+def get_whitelist():
+    args = request.args
+    w1 = [item['address'] for item in wdb[args.get('org_id')].all()]
+    return {
+        'data': w1,
+    }
 
 @api_bp.route("/api/whitelist", methods=['POST', 'PUT'])
 def whitelist_address():
     json = request.get_json()
     wdb[json.get('org_id')].insert(json)
+    return json, 200
+
+@api_bp.route("/api/set_whitelist", methods=['POST', 'PUT']) 
+def set_whitelist(): 
+    json = request.get_json() 
+    org_id = json.get('org_id') 
+    whitelist = [{
+        'address': address, 
+        'org_id': org_id, 
+    } for address in json['list']] 
+    
+    table = wdb[org_id] 
+
+    print(repr(whitelist)) 
+
+    table.delete() 
+
+    table.insert_many(whitelist) 
+
     return json, 200
 
 @api_bp.route("/api/get_org", methods=['GET'])

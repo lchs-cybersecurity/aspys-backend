@@ -64,6 +64,7 @@ def display_settings():
     bl = bdb[org_id].all()
 
     orgs = load_organizations()
+    '''
     for i in orgs:
         if i['id'] == org_id:
             support_emails_str = ""
@@ -72,9 +73,9 @@ def display_settings():
                 support_emails_str += i
                 if support_emails.index(i) + 1 < len(support_emails):
                     support_emails_str += ", "
+    ''' 
 
-    return render_template("settings.html", wl=wl, bl=bl, 
-    support_emails_str=support_emails_str)
+    return render_template("settings.html", wl=wl, bl=bl, org_id=org_id) 
 
 @admin_bp.route("/settings", methods=['POST', 'PUT'])
 # @login_required

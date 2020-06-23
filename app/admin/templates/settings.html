@@ -6,22 +6,47 @@
 
 {% block content %}
 
-<form action="{{ url_for('admin_bp.write_settings') }}" method=post id="settings-form">
-    <ul class="fields">
-        <li>
-            <label for="support_emails">Emergency support emails (separated by commas)</label><br>
-            <textarea type="text" id="support_emails" name="support_emails"
-            style="width:500px;height:100">{{ support_emails_str }}</textarea>
-        </li>
-    </ul>
-
-    <div class="centered">
-        <button type="submit">Apply Changes</button>
-    </div>
-    
-</form>
+<ul class="fields">
+    <!--
+    <li>
+        <label for="support_emails">Emergency support emails (separated by commas)</label><br>
+        <textarea type="text" id="support_emails" name="support_emails"
+        style="width:500px;height:100">{{ support_emails_str }}</textarea>
+    </li>
+    --> 
+    <li>
+        <h1>Blacklist</h1>
+        <div>Enter one email address per line</div>
+        <textarea id='blacklist_input'></textarea> 
+        <button id='blacklist_submit'>Save</button> 
+    </li>
+    <li>
+        <h1>Whitelist</h1>
+        <div>Enter one email address per line</div>
+        <textarea id='whitelist_input'></textarea> 
+        <button id='whitelist_submit'>Save</button> 
+    </li>
+</ul>
 
 {% endblock %}
 
-{% block js %}
+{% block css %}
+    <link href="{{ url_for('static',filename='css/settings.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block js %} 
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
+<script>
+    const urls = {
+        set_blacklist: "{{ url_for('api_bp.set_blacklist') }}", 
+        get_blacklist: "{{ url_for('api_bp.get_blacklist') }}", 
+        set_whitelist: "{{ url_for('api_bp.set_whitelist') }}", 
+        get_whitelist: "{{ url_for('api_bp.get_whitelist') }}", 
+    } 
+
+    const org_id = '{{ org_id }}'; 
+</script>
+<script src="{{ url_for('static',filename='js/settings.js') }}"></script>
+
 {% endblock %}
