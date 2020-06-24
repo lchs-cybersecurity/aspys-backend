@@ -17,7 +17,7 @@ def try_discord_send(data):
             message = {
                 "embeds": [{
                     "color": data['color'] if 'color' in data else "53622",
-                    "title": data['title'] if 'title' in data else "Veritas",
+                    "title": data['title'] if 'title' in data else "Aspys",
                     "timestamp": str(now()),
                     "fields": embed_fields
                 }]

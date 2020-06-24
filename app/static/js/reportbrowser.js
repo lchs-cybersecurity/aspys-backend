@@ -51,21 +51,21 @@ function createPopup($this) {
     $this.addClass('highlighted-link'); // it highlights the link in a cool border so you know the popup is about that one
 
     let popup = $(`
-    <div class="veritas-link-confirm">
-        <div class="veritas-icon"></div>
+    <div class="aspys-link-confirm">
+        <div class="aspys-icon"></div>
         <p class='link-confirm-text'>Since this is a potential phishing email, the links may lead to malicious sites! Proceed with caution. This link goes to: </p>
         <p class='link-confirm-href'>${href}</p> 
         </br>
-        <div class="veritas-buttons">
-            <button class="veritas-cancel">Cancel</button>
-            <button class="veritas-proceed">Proceed</button>
+        <div class="aspys-buttons">
+            <button class="aspys-cancel">Cancel</button>
+            <button class="aspys-proceed">Proceed</button>
         </div>
     </div>
     `); // creates the popup element
     
     popup.insertAfter($this); // places it after the a element
 
-    popup.find('.veritas-cancel').click(function(e) { // when you click the cancel button
+    popup.find('.aspys-cancel').click(function(e) { // when you click the cancel button
         popup.remove(); 
         $this.removeClass('highlighted-link'); // removes the cool border
 
@@ -73,7 +73,7 @@ function createPopup($this) {
         e.stopPropagation(); // prevents the event from propagating up the DOM tree
     }); 
 
-    popup.find('.veritas-proceed').click(function(e) { // when you click the proceed button
+    popup.find('.aspys-proceed').click(function(e) { // when you click the proceed button
         window.open(href); 
 
         popup.remove(); 
@@ -92,7 +92,7 @@ function neuterLinks() {
     as.click(function(e) {
         let $this = $(this); 
 
-        const next = $this.next('.veritas-link-confirm'); // does it already have a corresponding popup? 
+        const next = $this.next('.aspys-link-confirm'); // does it already have a corresponding popup? 
 
         //console.log(next); 
 
