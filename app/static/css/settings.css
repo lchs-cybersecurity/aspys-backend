@@ -1,0 +1,39 @@
+label {
+    padding-bottom: 10px;
+}
+
+.list-input {
+    display: block;
+    width: 360px;
+    min-height: 80px;
+    height: 80px;
+    max-height: 440px;
+    padding: 10px;
+    overflow-y: scroll !important;
+}
+
+.fields-container {
+    padding: 40px;
+    margin: 0;
+    text-align: center;
+}
+
+.fields-container:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.field {
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    padding: 24px;
+    width: 500px;
+    margin: 20px;
+    background-color: #eeeeee;
+    border-radius: 8px;
+    border: 1px solid #222222;
+    /* box-shadow: 5px 5px 5px grey; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

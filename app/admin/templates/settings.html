@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<ul class="fields">
+<div class="fields-container">
     <!--
     <li>
         <label for="support_emails">Emergency support emails (separated by commas)</label><br>
@@ -14,19 +14,36 @@
         style="width:500px;height:100">{{ support_emails_str }}</textarea>
     </li>
     --> 
-    <li>
-        <h1>Blacklist</h1>
-        <div>Enter one email address per line</div>
-        <textarea id='blacklist_input'></textarea> 
-        <button id='blacklist_submit'>Save</button> 
-    </li>
-    <li>
-        <h1>Whitelist</h1>
-        <div>Enter one email address per line</div>
-        <textarea id='whitelist_input'></textarea> 
-        <button id='whitelist_submit'>Save</button> 
-    </li>
-</ul>
+
+    <div class="field">
+        <h1>Whitelisted Domains</h1>
+        <label for='domain_whitelist_input'>Enter one email domain per line</label>
+        <textarea id='domain_whitelist_input' class='list-input'></textarea> 
+        <br>
+        <button id='domain_whitelist_submit' class='settings-submit'>Save</button> 
+    </div>
+    <div class="field">
+        <h1>Blacklisted Domains</h1>
+        <label for='domain_blacklist_input'>Enter one email domain per line</label>
+        <textarea id='domain_blacklist_input' class='list-input'></textarea> 
+        <br>
+        <button id='domain_blacklist_submit' class='settings-submit'>Save</button> 
+    </div>
+    <div class="field">
+        <h1>Whitelisted Emails</h1>
+        <label for='whitelist_input'>Enter one email address per line</label>
+        <textarea id='whitelist_input' class='list-input'></textarea> 
+        <br>
+        <button id='whitelist_submit' class='settings-submit'>Save</button> 
+    </div>
+    <div class="field">
+        <h1>Blacklisted Emails</h1>
+        <label for='blacklist_input'>Enter one email address per line</label>
+        <textarea id='blacklist_input' class='list-input'></textarea> 
+        <br>
+        <button id='blacklist_submit' class='settings-submit'>Save</button> 
+    </div>
+</div>
 
 {% endblock %}
 
@@ -34,7 +51,7 @@
     <link href="{{ url_for('static',filename='css/settings.css') }}" rel="stylesheet"/>
 {% endblock %}
 
-{% block js %} 
+{% block js %}
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
 <script>
