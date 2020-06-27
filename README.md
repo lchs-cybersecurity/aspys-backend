@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="static/favicon.ico" height=100/><br>
+    <img src="app/static/favicon.ico" height=100/><br>
 <h1>⚙ Aspys Backend ⚙</h1>
 </div>
 
