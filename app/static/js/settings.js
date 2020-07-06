@@ -92,7 +92,7 @@ function validEmail(address) {
     return valid; 
 }
 
-function requireValidEmail(inputSel, buttonSel) { // adds an event that disables/enables the submit button depending on whether the emails entered are valid
+function requireValidEmail(inputSel, buttonSel, formatErrorMsg) { // adds an event that disables/enables the submit button depending on whether the emails entered are valid
     let $input = $(inputSel); 
     let $button = $(buttonSel); 
 
@@ -117,6 +117,7 @@ function requireValidEmail(inputSel, buttonSel) { // adds an event that disables
         } 
 
         $button.attr('disabled', !valid); 
+        $(formatErrorMsg).css('display', (valid?'none':'initial'));
     })
 }
 
@@ -128,8 +129,8 @@ $(document).ready(function() {
         this.style.height = (this.scrollHeight) + 'px';
     }); // resizes the text box with every input
 
-    requireValidEmail('#blacklist_input', '#blacklist_submit'); 
-    requireValidEmail('#whitelist_input', '#whitelist_submit'); 
+    requireValidEmail('#blacklist_input', '#blacklist_submit', '#blacklist_format_error_msg'); 
+    requireValidEmail('#whitelist_input', '#whitelist_submit', '#whitelist_format_error_msg'); 
 
     $('#blacklist_submit').click(function(e) { // what happens when you click the blacklist submit
         let input = $('#blacklist_input').val(); 
