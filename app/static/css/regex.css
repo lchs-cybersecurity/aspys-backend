@@ -1,0 +1,20 @@
+p {
+    width: 600px;
+}
+
+code {
+    display: inline;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #eeeeee;
+}
+
+.example {
+    display: block !important;
+    padding: 14px;
+    width: 500px; 
+}
+
+hr {
+    width: 70%;
+}

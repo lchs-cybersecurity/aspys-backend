@@ -1,0 +1,43 @@
+{% extends "admin.html" %}
+
+{% block title %}Regex Whitelisting/Blacklisting: Basic Examples{% endblock %}
+
+{% block content_class %}full{% endblock %}
+
+{% block content %}
+<br>
+
+<h3>Email Addresses</h3>
+<p>You can match email addresses by listing them directly:</p>
+<pre><code class="example">mlisano21@mylcusd.net
+jlewsadder@lcusd.net
+</code></pre>
+<br>
+
+<h3>Domains</h3>
+<p>You can match domains by inserting the <code>.*</code> combination of regex operators to "match anything":</p>
+<pre><code class="example">.*@mylcusd.net
+.*@lcusd.net
+</code></pre>
+<br>
+
+<h3>Including Subdomains</h3>
+<p>You can match all subdomains of a domain by inserting the <code>.*</code> before the domain name:</p>
+<pre><code class="example">.*@.*google.com
+.*@.*github.com
+</code></pre>
+<br>
+
+
+<h3>More on Regular Expressions</h3>
+<p>The examples we give here barely scratch the surface of the powerful kinds of whitelist/blacklist rules you can reate with regex. Below are some resources we recommend if you'd like to try creating rules that are even more complex:</p>
+<ul>
+    <li><a href="https://regexone.com/">RegexOne</a></li>
+    <li><a href="https://www.regular-expressions.info/tutorialcnt.html">Regular-Expressions.info</a></li>
+</ul>
+
+{% endblock %}
+
+{% block css %}
+<link href="{{ url_for('static',filename='css/regex.css') }}" rel="stylesheet"/>
+{% endblock %}

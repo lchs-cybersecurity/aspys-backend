@@ -45,6 +45,11 @@ def handle_logout():
 def display_info():
     return render_template("info.html")
 
+@admin_bp.route("/regex", methods=['GET'])
+@login_required
+def display_regex_instructions():
+    return render_template("regex.html")
+
 
 @admin_bp.route("/browser")
 @login_required
