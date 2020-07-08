@@ -83,7 +83,7 @@ def display_settings():
     return render_template("settings.html", wl=wl, bl=bl, org_id=org_id) 
 
 @admin_bp.route("/settings", methods=['POST', 'PUT'])
-# @login_required
+@login_required
 def write_settings():
     if not current_user.is_authenticated:
         return 403
