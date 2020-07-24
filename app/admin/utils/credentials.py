@@ -1,4 +1,4 @@
-from hashlib import md5
+from hashlib import md5, sha256
 from string import ascii_letters
 from random import randint, choice as random_choose
 from json import load as json_load, dumps as json_dumps, dump as json_dump
@@ -24,7 +24,7 @@ class CredentialsManager:
     def sh_pw(self, pw: str):
         """Salt and hash password"""
         salted_pw = self.salt_start+pw+self.salt_end
-        return md5(salted_pw.encode()).hexdigest()
+        return sha256(salted_pw.encode()).hexdigest()
 
     def check_credentials(self, user: str, raw_pw: str, logins: list):
         """Check validity of login attempt credentials"""
