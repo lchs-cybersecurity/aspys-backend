@@ -108,3 +108,66 @@ def write_settings():
 
     # NOTE: Return a redirect for now, unless we want to reimplement/move stringification stuff later
     return redirect("/settings")
+
+
+# -- Admin Actions --
+
+@admin_bp.route("/delete", methods=['POST', 'PUT'])
+@login_required
+def delete_item():
+    json = request.get_json()
+    rdb[json.get('org_id')].delete(id=json.get('id'))
+    return json, 200
+
+
+@admin_bp.route("/set_blacklist", methods=['POST', 'PUT']) 
+@login_required
+def set_blacklist(): 
+    json = request.get_json() 
+
+    print(json) 
+
+    org_id = json.get('org_id') 
+    blacklist = [{
+        'address': address, 
+        'org_id': org_id, 
+    } for address in json['list']] 
+    
+    table = bdb[org_id] 
+
+    print(repr(blacklist)) 
+
+    table.delete() 
+
+    table.insert_many(blacklist) 
+
+    return json, 200
+
+
+@admin_bp.route("/whitelist", methods=['POST', 'PUT'])
+@login_required
+def whitelist_address():
+    json = request.get_json()
+    wdb[json.get('org_id')].insert(json)
+    return json, 200
+
+
+@admin_bp.route("/set_whitelist", methods=['POST', 'PUT']) 
+@login_required
+def set_whitelist(): 
+    json = request.get_json() 
+    org_id = json.get('org_id') 
+    whitelist = [{
+        'address': address, 
+        'org_id': org_id, 
+    } for address in json['list']] 
+    
+    table = wdb[org_id] 
+
+    print(repr(whitelist)) 
+
+    table.delete() 
+
+    table.insert_many(whitelist) 
+
+    return json, 200
