@@ -69,6 +69,7 @@ def blacklist_address():
     bdb[json.get('org_id')].upsert(json, ['address'])
     print(json)
     return json, 200
+"""
 
 @api_bp.route("/api/whitelist", methods=['GET'])
 def get_whitelist():
@@ -77,7 +78,6 @@ def get_whitelist():
     return {
         'data': w1,
     }
-"""
 
 
 @api_bp.route("/api/get_org", methods=['GET'])
