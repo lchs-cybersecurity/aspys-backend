@@ -142,3 +142,6 @@ Pipfile.lock
 
 # large csv
 *.csv
+
+# extension key
+extension_key.txt
