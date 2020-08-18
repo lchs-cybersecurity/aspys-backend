@@ -109,6 +109,24 @@ def write_settings():
     # NOTE: Return a redirect for now, unless we want to reimplement/move stringification stuff later
     return redirect("/settings")
 
+# -- Getters --
+
+@admin_bp.route("/blacklist", methods=['GET'])
+def get_blacklist():
+    args = request.args
+    b1 = [item['address'] for item in bdb[args.get('org_id')].all()]
+    return {
+        'data': b1,
+    }
+
+@admin_bp.route("/whitelist", methods=['GET'])
+@login_required
+def get_whitelist():
+    args = request.args
+    w1 = [item['address'] for item in wdb[args.get('org_id')].all()]
+    return {
+        'data': w1,
+    }
 
 # -- Admin Actions --
 
