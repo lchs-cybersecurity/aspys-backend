@@ -4,7 +4,6 @@ from .admin.utils.login import login_manager
 from .assets import compile_static_assets
 from werkzeug.serving import run_simple
 from os import getenv
-from waitress import serve as waitress_serve
 
 
 def create_app():
@@ -34,6 +33,6 @@ def run_app(app):
     host = getenv('HOST')
     port = int(getenv('PORT'))
     if getenv('FLASK_ENV') == 'production':
-        waitress_serve(app, host=host, port=port, ssl_context='adhoc')
+        run_simple(host, port, app, ssl_context='adhoc')
     else:
         run_simple(host, port, app)
