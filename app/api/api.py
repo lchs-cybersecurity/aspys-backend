@@ -73,14 +73,6 @@ def get_blacklist():
         'data': b1,
     } if sha256(api_key.encode()).hexdigest() == get_ext_key() else 500
 
-"""
-@api_bp.route("/api/blacklist", methods=['POST', 'PUT'])
-def blacklist_address():
-    json = request.get_json()
-    bdb[json.get('org_id')].upsert(json, ['address'])
-    print(json)
-    return json, 200
-"""
 
 @api_bp.route("/api/whitelist", methods=['GET'])
 def get_whitelist():

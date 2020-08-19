@@ -170,6 +170,14 @@ def whitelist_address():
     return json, 200
 
 
+@admin_bp.route("/blacklist", methods=['POST', 'PUT'])
+def blacklist_address():
+    json = request.get_json()
+    bdb[json.get('org_id')].upsert(json, ['address'])
+    print(json)
+    return json, 200
+
+
 @admin_bp.route("/set_whitelist", methods=['POST', 'PUT']) 
 @login_required
 def set_whitelist(): 
