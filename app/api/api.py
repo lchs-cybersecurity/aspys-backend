@@ -38,7 +38,7 @@ def handle_report():
     api_key = request.get_json()['key']
     org_id = request.get_json()['org_id']
     data['timestamp'] = now()
-    rdb[org_id].insert(data)
+    rdb.get_table(org_id).insert(data)
     return data, 200 if sha256(api_key.encode()).hexdigest() == get_ext_key() else 500
 
 

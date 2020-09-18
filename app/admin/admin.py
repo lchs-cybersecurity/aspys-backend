@@ -56,8 +56,8 @@ def display_regex_instructions():
 def display_browser():
     org_id = current_user.org_id
 
-    data = rdb[org_id].all()
-    bl = bdb[org_id].all()
+    data = rdb.get_table(org_id).all()
+    bl = bdb.get_table(org_id).all()
 
     return render_template("reportbrowser.html", data=data, bl=bl, org_id=org_id)
 
@@ -65,8 +65,8 @@ def display_browser():
 @login_required
 def display_settings():
     org_id = current_user.org_id
-    wl = wdb[org_id].all()
-    bl = bdb[org_id].all()
+    wl = wdb.get_table(org_id).all()
+    bl = bdb.get_table(org_id).all()
 
     orgs = load_organizations()
     '''
@@ -91,8 +91,8 @@ def write_settings():
     org_id = current_user.org_id
 
     # TODO: Come up with proper (EASY AND STREAMLINED) way to display & write to WL/BL
-    # wl = wdb[org_id].all()
-    # bl = bdb[org_id].all()
+    # wl = wdb.get_table(org_id).all()
+    # bl = bdb.get_table(org_id).all()
 
     support_emails_str = str(request.form.get("support_emails"))
 
@@ -151,7 +151,7 @@ def set_blacklist():
         'org_id': org_id, 
     } for address in json['list']] 
     
-    table = bdb[org_id] 
+    table = bdb.get_table(org_id) 
 
     print(repr(blacklist)) 
 
@@ -188,7 +188,7 @@ def set_whitelist():
         'org_id': org_id, 
     } for address in json['list']] 
     
-    table = wdb[org_id] 
+    table = wdb.get_table(org_id) 
 
     print(repr(whitelist)) 
 
