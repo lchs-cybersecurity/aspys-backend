@@ -3,6 +3,7 @@ from flask_assets import Environment
 from .admin.utils.login import login_manager
 from .assets import compile_static_assets
 from werkzeug.serving import run_simple
+from waitress import serve as waitress_serve
 from os import getenv
 
 
@@ -33,6 +34,7 @@ def run_app(app):
     host = getenv('HOST')
     port = int(getenv('PORT'))
     if getenv('FLASK_ENV') == 'production':
-        run_simple(host, port, app, ssl_context='adhoc')
+        # run_simple(host, port, app, ssl_context='adhoc')
+        waitress_serve(app, host=host, port=port, url_scheme='https')
     else:
         run_simple(host, port, app)
