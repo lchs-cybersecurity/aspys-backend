@@ -68,7 +68,7 @@ def handle_bug():
 def get_blacklist():
     args = request.args
     api_key = request.args.get('key')
-    b1 = [item['address'] for item in bdb[args.get('org_id')].all()]
+    b1 = [item['address'] for item in bdb()[args.get('org_id')].all()]
     return {
         'data': b1,
     } if sha256(api_key.encode()).hexdigest() == get_ext_key() else 500
@@ -78,7 +78,7 @@ def get_blacklist():
 def get_whitelist():
     args = request.args
     api_key = request.args.get('key')
-    w1 = [item['address'] for item in wdb[args.get('org_id')].all()]
+    w1 = [item['address'] for item in wdb()[args.get('org_id')].all()]
     return {
         'data': w1,
     } if sha256(api_key.encode()).hexdigest() == get_ext_key() else 500

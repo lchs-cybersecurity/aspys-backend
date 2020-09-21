@@ -1,5 +1,8 @@
 import dataset
 
-rdb = dataset.connect('sqlite:///reports.db')
-bdb = dataset.connect('sqlite:///blacklists.db')
-wdb = dataset.connect('sqlite:///whitelists.db')
+def rdb():
+    return dataset.connect('sqlite:///reports.db')
+def bdb():
+    return dataset.connect('sqlite:///blacklists.db')
+def wdb():
+    return dataset.connect('sqlite:///whitelists.db')
