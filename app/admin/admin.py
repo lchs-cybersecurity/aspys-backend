@@ -146,10 +146,7 @@ def set_blacklist():
     print(json) 
 
     org_id = json.get('org_id') 
-    blacklist = [{
-        'address': address, 
-        'org_id': org_id, 
-    } for address in json['list']] 
+    blacklist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     
     table = bdb().get_table(org_id) 
 
@@ -183,10 +180,7 @@ def blacklist_address():
 def set_whitelist(): 
     json = request.get_json() 
     org_id = json.get('org_id') 
-    whitelist = [{
-        'address': address, 
-        'org_id': org_id, 
-    } for address in json['list']] 
+    whitelist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     
     table = wdb().get_table(org_id) 
 
