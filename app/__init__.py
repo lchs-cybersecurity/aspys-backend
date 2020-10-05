@@ -37,4 +37,5 @@ def run_app(app):
         # run_simple(host, port, app, ssl_context='adhoc')
         waitress_serve(app, host=host, port=port, url_scheme='https')
     else:
+        app.debug = True
         run_simple(host, port, app)
