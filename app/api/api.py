@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from flask_cors import CORS
 from hashlib import sha256
 import os.path
+import re
 from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
 # from app.api.utils.rate_risk import rate_link
@@ -77,6 +78,26 @@ def get_whitelist():
         'data': w1,
     } if sha256(api_key.encode()).hexdigest() == get_ext_key() else 400
 
+@api_bp.route("/api/verify_email", methods=['GET'])
+def verify_email():
+
+    target = request.args.get('address')
+    api_key = request.args.get('key')
+
+    # unclassified --> 0
+    numrating = 0
+
+    # whitelisted --> 1
+    for item in wdb()[request.args.get('org_id')].all():
+        if re.match(item['address'], target):
+            numrating = 1
+
+    # blacklisted --> 2
+    for item in bdb()[request.args.get('org_id')].all():
+        if re.match(item['address'], target):
+            numrating = 2
+    
+    return {'status': numrating} if sha256(api_key.encode()).hexdigest() == get_ext_key() else 400
 
 @api_bp.route("/api/get_org", methods=['GET'])
 def get_organization():
