@@ -33,11 +33,11 @@ def rate_risk_link():
 @api_bp.route("/api/report", methods=['POST', 'PUT'])
 def handle_report():
 
+    data = request.get_json()
     api_key = data['key']
     if sha256(api_key.encode()).hexdigest() != get_ext_key():
         return 400
 
-    data = request.get_json()
     report_data = data['report_data']
     org_id = request.get_json()['org_id']
     report_data['timestamp'] = now()
@@ -130,6 +130,7 @@ def verify_email():
 @api_bp.route("/api/get_org", methods=['GET'])
 def get_organization():
 
+    args = request.args
     api_key = args.get('key')
     if sha256(api_key.encode()).hexdigest() != get_ext_key():
         return 400
@@ -137,7 +138,6 @@ def get_organization():
     # json = request.get_json()
     # target_domain = json['address'].split("@")[1]
     # orgs = load_organizations()
-    args = request.args
     target_domain = args.get('address').split("@")[1]
     orgs = load_organizations()  
 
