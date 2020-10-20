@@ -29,7 +29,7 @@ def test_custom_rate_link():
     tests = [
         (0.0, 'https://www.google.com/'),
         (0.0, 'https://stackoverflow.com/questions/51451464/get-request-response-text-prints-invalid-characters'),
-        (0.0, 'https://lchs-cybersecurity.github.io/lchs-cybersecurity-site/'),
+        (0.0, 'https://lchs-cybersecurity.github.io/'),
         (0.5, 'http://hamt.jp/program/wp-content/themes/twentyfourteen/home/latampass/cadastro/?cli=Cliente&amp;/7veVm4c71c/kgkrHOKUo5.php'),
         (0.5, 'http://edimfulbu.tk/'),
         (0.5, 'https://dziennikmiasto.098.pl'),
