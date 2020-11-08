@@ -127,6 +127,41 @@ def verify_email():
     
     return {'status': numrating}
 
+
+@api_bp.route("/api/verify_emails", methods=['GET'])
+def verify_emails():
+
+    api_key = request.args.get('key')
+    if sha256(api_key.encode()).hexdigest() != get_ext_key():
+        return 400
+
+    targets = request.args.getlist('addresses')
+    done = []
+    ratings = {}
+
+    for target in targets:
+
+        if target not in done:
+
+            # unclassified --> 0
+            numrating = 0
+
+            # whitelisted --> 1
+            for item in wdb()[request.args.get('org_id')].all():
+                if re.match(item['address'], target):
+                    numrating = 1
+
+            # blacklisted --> 2
+            for item in bdb()[request.args.get('org_id')].all():
+                if re.match(item['address'], target):
+                    numrating = 2
+            
+            ratings[target] = numrating
+            done.append(target)
+    
+    return ratings, 200
+
+
 @api_bp.route("/api/get_org", methods=['GET'])
 def get_organization():
 
