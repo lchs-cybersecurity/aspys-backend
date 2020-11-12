@@ -34,7 +34,10 @@ def run_app(app):
     host = getenv('HOST')
     port = int(getenv('PORT'))
     if getenv('FLASK_ENV') == 'production':
-        # run_simple(host, port, app, ssl_context='adhoc')
+        app.config.update(
+            DEBUG=False,
+            TEMPLATES_AUTO_RELOAD=True
+        )
         waitress_serve(app, host=host, port=port, url_scheme='https')
     else:
         app.debug = True
