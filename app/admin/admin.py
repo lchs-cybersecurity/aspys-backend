@@ -29,7 +29,7 @@ def handle_login():
     success = try_login(username, password)
     if (success):
         return redirect("/browser")
-    return render_template("login.html", error='Check the orgainzation username and/or password.')
+    return render_template("login.html", error='Check the organization username and/or password.')
 
 
 @admin_bp.route("/logout", methods=['GET'])
