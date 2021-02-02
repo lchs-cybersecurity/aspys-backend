@@ -6,7 +6,7 @@ import re
 from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
 # from app.api.utils.rate_risk import rate_link
-from app.db import rdb, bdb, wdb
+from app.db import rdb, bdb, wdb, tdb
 from app.admin.utils.credentials import load_organizations
 
 def get_ext_key():
@@ -124,6 +124,11 @@ def verify_email():
     for item in bdb()[request.args.get('org_id')].all():
         if re.match(item['address'], target):
             numrating = 2
+
+    # test db --> 0 (pretend to be unclassified)
+    for item in tdb()[request.args.get('org_id')].all():
+        if re.match(item['address'], target):
+            numrating = 0
     
     return {'status': numrating}
 
@@ -155,7 +160,12 @@ def verify_emails():
             for item in bdb()[request.args.get('org_id')].all():
                 if re.match(item['address'], target):
                     numrating = 2
-            
+
+            # test db --> 0 (pretend to be unclassified)
+            for item in tdb()[request.args.get('org_id')].all():
+                if re.match(item['address'], target):
+                    numrating = 0
+
             ratings[target] = numrating
             done.append(target)
     
