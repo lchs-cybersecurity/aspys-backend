@@ -132,6 +132,7 @@ $(document).ready(function() {
     requireValidEmail('#blacklist_input', '#blacklist_submit', '#blacklist_format_error_msg'); 
     requireValidEmail('#whitelist_input', '#whitelist_submit', '#whitelist_format_error_msg'); 
     requireValidEmail('#testaddrlist_input', '#testaddrlist_submit', '#testaddrlist_format_error_msg'); 
+    requireValidEmail('#testtargetlist_input', '#testtargetlist_submit', '#testtargetlist_format_error_msg'); 
 
     $('#blacklist_submit').click(function(e) { // what happens when you click the blacklist submit
         let input = $('#blacklist_input').val(); 
@@ -154,7 +155,15 @@ $(document).ready(function() {
         sendList(urls.set_testaddrlist, testaddrlist); 
     }); 
 
+    $('#testtargetlist_submit').click(function(e) { // what happens when you click the testtargetlist submit
+        let input = $('#testtargetlist_input').val(); 
+        let testtargetlist = input ? input.split('\n') : []; 
+
+        sendList(urls.set_testtargetlist, testtargetlist); 
+    }); 
+
     loadList(urls.get_blacklist, '#blacklist_input'); 
     loadList(urls.get_whitelist, '#whitelist_input'); 
     loadList(urls.get_testaddrlist, '#testaddrlist_input'); 
+    loadList(urls.get_testtargetlist, '#testtargetlist_input'); 
 }); 
