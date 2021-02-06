@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, send_file
 from flask_cors import CORS
 from hashlib import sha256
 import os.path
@@ -6,7 +6,7 @@ import re
 from app.api.utils.discord import try_discord_send
 from app.api.utils.functions import now
 # from app.api.utils.rate_risk import rate_link
-from app.db import rdb, bdb, wdb, tdb
+from app.db import rdb, bdb, wdb, tdb, opentrackdb, linktrackdb
 from app.admin.utils.credentials import load_organizations
 
 def get_ext_key():
@@ -204,7 +204,6 @@ def get_support_emails():
     if sha256(api_key.encode()).hexdigest() != get_ext_key():
         return 400
 
-
     orgs = load_organizations()
 
     for o in orgs:
@@ -213,6 +212,27 @@ def get_support_emails():
                 'support_emails': o['support_emails']
             }, 200
     return {} 
+
+
+# Tracking pixels 
+# NOTE: MUST have org_id and assessment_id
+# NOTE: ADD ORM LATER
+
+@api_bp.route("/api/opentrack", methods=['GET'])
+def get_img_opentrack():
+    try:
+        return send_file(rel_path('./img/pixel_white_1x1.png'), mimetype='image/png')
+    except:
+        return 400
+
+
+@api_bp.route("/api/linktrack", methods=['GET'])
+def get_img_linktrack():
+    try:
+        return send_file(rel_path('./img/pixel_white_1x1.png'), mimetype='image/png')
+    except:
+        return 400
+
 
 def rel_path(string):
     return os.path.join(os.path.dirname(__file__), string)
