@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
 from flask_login import login_required, current_user, logout_user
 from .utils.login import try_login, logout_bak_sync, User
-from app.db import rdb, wdb, bdb
+from app.db import rdb, wdb, bdb, tdb, ttdb
 from .utils.credentials import load_organizations, write_organizations
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static') 
@@ -29,7 +29,7 @@ def handle_login():
     success = try_login(username, password)
     if (success):
         return redirect("/browser")
-    return render_template("login.html", error='Check the orgainzation username and/or password.')
+    return render_template("login.html", error='Check the organization username and/or password.')
 
 
 @admin_bp.route("/logout", methods=['GET'])
@@ -50,6 +50,10 @@ def display_info():
 def display_regex_instructions():
     return render_template("regex.html")
 
+@admin_bp.route("/assessment")
+@login_required
+def display_assessment():
+    return render_template("assessment.html")
 
 @admin_bp.route("/browser")
 @login_required
@@ -60,6 +64,7 @@ def display_browser():
     bl = bdb().get_table(org_id).all()
 
     return render_template("reportbrowser.html", data=data, bl=bl, org_id=org_id)
+
 
 @admin_bp.route("/settings", methods=['GET'])
 @login_required
@@ -81,6 +86,7 @@ def display_settings():
     ''' 
 
     return render_template("settings.html", wl=wl, bl=bl, org_id=org_id) 
+
 
 @admin_bp.route("/settings", methods=['POST', 'PUT'])
 @login_required
@@ -128,6 +134,24 @@ def get_whitelist():
         'data': w1,
     }
 
+@admin_bp.route("/testaddrlist", methods=['GET'])
+@login_required
+def get_testaddrlist():
+    args = request.args
+    w1 = [item['address'] for item in tdb()[args.get('org_id')].all()]
+    return {
+        'data': w1,
+    }
+
+@admin_bp.route("/testtargetlist", methods=['GET'])
+@login_required
+def get_testtargetlist():
+    args = request.args
+    w1 = [item['address'] for item in ttdb()[args.get('org_id')].all()]
+    return {
+        'data': w1,
+    }
+
 # -- Admin Actions --
 
 @admin_bp.route("/delete", methods=['POST', 'PUT'])
@@ -142,19 +166,64 @@ def delete_item():
 @login_required
 def set_blacklist(): 
     json = request.get_json() 
-
-    print(json) 
-
     org_id = json.get('org_id') 
     blacklist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     
     table = bdb().get_table(org_id) 
 
-    print(repr(blacklist)) 
-
     table.delete() 
 
     table.insert_many(blacklist) 
+
+    return json, 200
+
+
+@admin_bp.route("/set_whitelist", methods=['POST', 'PUT']) 
+@login_required
+def set_whitelist(): 
+    json = request.get_json() 
+    org_id = json.get('org_id') 
+    whitelist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
+    
+    table = wdb().get_table(org_id) 
+
+    table.delete() 
+
+    table.insert_many(whitelist) 
+
+    return json, 200
+
+
+@admin_bp.route("/set_testaddrlist", methods=['POST', 'PUT']) 
+@login_required
+def set_testaddrlist(): 
+    json = request.get_json() 
+    org_id = json.get('org_id') 
+    testaddrlist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
+    print(testaddrlist)
+    
+    table = tdb().get_table(org_id) 
+
+    table.delete() 
+
+    table.insert_many(testaddrlist) 
+
+    return json, 200
+
+
+@admin_bp.route("/set_testtargetlist", methods=['POST', 'PUT']) 
+@login_required
+def set_testtargetlist(): 
+    json = request.get_json() 
+    org_id = json.get('org_id') 
+    testtargetlist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
+    print(testtargetlist)
+    
+    table = ttdb().get_table(org_id) 
+
+    table.delete() 
+
+    table.insert_many(testtargetlist) 
 
     return json, 200
 
@@ -168,26 +237,10 @@ def whitelist_address():
 
 
 @admin_bp.route("/blacklist", methods=['POST', 'PUT'])
+@login_required
 def blacklist_address():
     json = request.get_json()
     bdb()[json.get('org_id')].upsert(json, ['address'])
     print(json)
     return json, 200
 
-
-@admin_bp.route("/set_whitelist", methods=['POST', 'PUT']) 
-@login_required
-def set_whitelist(): 
-    json = request.get_json() 
-    org_id = json.get('org_id') 
-    whitelist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
-    
-    table = wdb().get_table(org_id) 
-
-    print(repr(whitelist)) 
-
-    table.delete() 
-
-    table.insert_many(whitelist) 
-
-    return json, 200

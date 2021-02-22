@@ -16,24 +16,43 @@
     --> 
 
     <div class="field">
-        <h1>Whitelist</h1>
-        <label for='whitelist_input'>Enter one email item (user@domain.com) per line. Regex formatting is supported. <a href="/regex">More info</a></label>
+        <h1>Organizational User/Domain Rules</h1>
+        <p>Enter one email item (user@domain.com) per line. Regex formatting is supported. <a href="/regex">More info</a></p>
+        <label for='whitelist_input'><strong>Whitelist</strong></label>
         <textarea id='whitelist_input' class='list-input' spellcheck=false></textarea> 
         <br>
         <button id='whitelist_submit' class='settings-submit'>Save</button> 
         <span style="display:inline-block; width: 6px"></span>
         <p id='whitelist_format_error_msg' class='red'>Incorrect formatting!</p>
-    </div>
+        <br><br>
 
-    <div class="field">
-        <h1>Blacklist</h1>
-        <label for='blacklist_input'>Enter one email item (user@domain.com) per line. Regex formatting is supported. <a href="/regex">More info</a></label>
+        <label for='blacklist_input'><strong>Blacklist</strong></label>
         <textarea id='blacklist_input' class='list-input' spellcheck=false></textarea> 
         <br>
         <button id='blacklist_submit' class='settings-submit'>Save</button> 
         <span style="display:inline-block; width: 6px"></span>
         <p id='blacklist_format_error_msg' class='red'>Incorrect formatting!</p>
     </div>
+
+    <div class="field">
+        <h1>Internal Testing (<a href="/assessment">Assessments</a>)</h1>
+        <p>Enter one email item (user@domain.com) per line. Regex formatting is supported. <a href="/regex">More info</a></p>
+        <label for='testaddrlist_input'><strong>"Attacker" Address(es)</strong></label>
+        <textarea id='testaddrlist_input' class='list-input' spellcheck=false></textarea> 
+        <br>
+        <button id='testaddrlist_submit' class='settings-submit'>Save</button> 
+        <span style="display:inline-block; width: 6px"></span>
+        <p id='testaddrlist_format_error_msg' class='red'>Incorrect formatting!</p>
+        <br><br>
+
+        <label for='testtargetlist_input'><strong>Target Addresses (Mailing list)</strong></label>
+        <textarea id='testtargetlist_input' class='list-input' spellcheck=false></textarea> 
+        <br>
+        <button id='testtargetlist_submit' class='settings-submit'>Save</button> 
+        <span style="display:inline-block; width: 6px"></span>
+        <p id='testtargetlist_format_error_msg' class='red'>Incorrect formatting!</p>
+    </div>
+
 </div>
 
 {% endblock %}
@@ -51,6 +70,10 @@
         get_blacklist: "{{ url_for('admin_bp.get_blacklist') }}", 
         set_whitelist: "{{ url_for('admin_bp.set_whitelist') }}", 
         get_whitelist: "{{ url_for('admin_bp.get_whitelist') }}", 
+        set_testaddrlist: "{{ url_for('admin_bp.set_testaddrlist') }}", 
+        get_testaddrlist: "{{ url_for('admin_bp.get_testaddrlist') }}",
+        set_testtargetlist: "{{ url_for('admin_bp.set_testtargetlist') }}", 
+        get_testtargetlist: "{{ url_for('admin_bp.get_testtargetlist') }}" 
     } 
 
     const org_id = '{{ org_id }}'; 

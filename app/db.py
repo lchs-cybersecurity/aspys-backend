@@ -8,3 +8,9 @@ def wdb():
     return dataset.connect('sqlite:///whitelists.db')
 def tdb():
     return dataset.connect('sqlite:///testaddrlists.db')
+def ttdb():
+    return dataset.connect('sqlite:///testtargetlists.db')
+def linktrackdb():
+    return dataset.connect('sqlite:///linktracklists.db')
+def opentrackdb():
+    return dataset.connect('sqlite:///opentracklists.db')
