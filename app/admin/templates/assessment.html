@@ -1,18 +1,104 @@
-
 {% extends "admin.html" %}
 
-{% block title %}Phishing Assessments{% endblock %}
+{% block title %}Phishing assessments{% endblock %}
 
 {% block content_class %}full{% endblock %}
-
 {% block content %}
 
-{% endblock %}
+    <div class="assessments">
+    {% set data = [{"id": "test","timestamp": "2021-23-2", "assessment": "Assessment Test #1", "assessment-result": {"targets": 4, "peopleclicked": ["a@example.com","b@example.com"],"peopleopened": ["a@example.com"]}, "content": "Content of assessment test"}] %}
+    
+    {% if data %} 
+        <table>
+            <tr class='assessment-headers'>
+                <th width=200>Timestamp</th>
+                <th width=500>Assessment</th>
+            </tr>
+        </table>
+        {% for assessment in data | reverse %} 
+            <div id="assessment-at-{{ assessment['id'] }}">
+                <div class='full-assessment-toggle' toggles="{{ assessment['id'] }}">
+                    <table>
+                        <tr class='assessments-row'>
+                            <th width=200>
+                                <div class='contents-container'>{{ assessment['timestamp'] }}</div> 
+                            </th>
+                            <th width=500>
+                                <div class='contents-container'>{{ assessment['assessment'] }}</div> 
+                            </th>
+                        </tr>
+                    </table>
+                </div> 
+                <div class='full-assessment hidden' id="full-assessment-{{ assessment['id'] }}">
+                    
+                <br><br>
+                    <div class="dataDisplay">
+                        <div class='assessment-space'>
+                        <div class='assessment-header'>
+                            <span class='assessment-title'>Assessment:</span><span> {{ assessment['assessment'] }}</span> 
+                        </div>
+                        <div class='assessment-header'>
+                            <span class='assessment-title'>People who clicked:</span><span> {{ ', '.join(assessment['assessment-result']['peopleclicked']) }}</span> 
+                        </div>
+                        <div class='assessment-header'>
+                            <span class='assessment-title'>People who opened:</span><span> {{ ', '.join(assessment['assessment-result']['peopleopened']) }}</span> 
+                        </div>
+                        <div class='assessment-title assessment-header'>Content:</div>
+                        <div class='assessment-body'>{{ assessment['content']|safe }}</div>
+                        <br>
+                        <div class='assessment-header'>
+                            <span class='assessment-title'>Timestamp:</span><span> {{ assessment['timestamp'] }}</span> 
+                        </div>
+                    </div>
+                    <!-- <br><br> -->
+                    <div  class="ct-chart ct-major-tenth" id="piechart-{{assessment['id']}}"></div>
+                    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+                    <script name='{{assessment|tojson}}' >
+                        var assessment = JSON.parse(document.currentScript.getAttribute("name"))
+                        console.log(document.getElementById("piechart-" + assessment.id))
+                        var labels = ["Opened", "Clicked", "Neither"]
+                        var data = {
+                            series: [assessment['assessment-result'].peopleopened.length, assessment['assessment-result'].peopleclicked.length, assessment['assessment-result'].targets - assessment['assessment-result'].peopleopened.length - assessment['assessment-result'].peopleclicked.length]
+                        };
+                        var chartColors = ['#2F3061','#f42c04','#ae759f'];
+                        var chartWidth = 82;
+                        console.log(assessment['assessment-result'].peopleclicked.length)
+                        var sum = function(a, b) { return a + b };
+                        console.log(data.series + "" + assessment['assessment-result'].targets)
+                        var chart = new Chartist.Pie('.ct-chart', data, {
+                            labelInterpolationFnc: function(value,idx) {
+                                var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+                                return labels[idx] + ' ' + percentage;
+                            },
+                            width: 300,
+                            height: 300,
+                            donut: true,
+                            donutWidth: 82,
+                        });
+                        chart.on('draw', function(data) {
+                            if(data.type === 'slice') {
+                                if (chartColors[data.index]) {
+                                    data.element._node.setAttribute('style','stroke: ' + chartColors[data.index] + '; stroke-width: ' + chartWidth + 'px');
+                                }
+                            }
+                        });
+                    </script> 
+                    <br>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div>No entries.</div>
+    {% endif %}
+    </div>
+    {% endblock %}
 
 {% block css %}
-
+    <link href="{{ url_for('static',filename='css/assessmentbrowser.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
 {% endblock %}
 
 {% block js %}
-
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="{{ url_for('static',filename='js/assessmentbrowser.js') }}"></script>
 {% endblock %}
