@@ -61,9 +61,9 @@ def display_browser():
     org_id = current_user.org_id
 
     data = rdb().get_table(org_id).all()
-    bl = bdb().get_table(org_id).all()
+    blacklist = bdb().get_table(org_id).all()
 
-    return render_template("reportbrowser.html", data=data, bl=bl, org_id=org_id)
+    return render_template("reportbrowser.html", data=data, bl=blacklist, org_id=org_id)
 
 
 @admin_bp.route("/settings", methods=['GET'])

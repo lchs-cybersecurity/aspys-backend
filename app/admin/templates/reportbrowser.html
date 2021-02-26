@@ -1,10 +1,13 @@
 {% extends "admin.html" %}
 
-{% block title %}Phishing Reports{% endblock %}
+{% block title %}Phishing Reports
+        <a href="browser" class="navbar-item">
+            <img src="../../static/img/reload.png" width="20px" title="refresh list, icon made by Gregor Cresnar"></img>
+        </a>
+{% endblock %}
 
 {% block content_class %}full{% endblock %}
 {% block content %}
-
     <div class="reports">
     {% if data %} 
         <table>
