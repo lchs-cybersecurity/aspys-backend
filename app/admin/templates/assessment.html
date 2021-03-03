@@ -4,7 +4,8 @@
 
 {% block content_class %}full{% endblock %}
 {% block content %}
-
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">  
     <div class="assessments">
     {% set data = [{"id": "test","timestamp": "2021-23-2", "assessment": "Assessment Test #1", "assessment-result": {"targets": 4, "peopleclicked": ["a@example.com","b@example.com"],"peopleopened": ["a@example.com"]}, "content": "Content of assessment test"}] %}
     
@@ -30,7 +31,6 @@
                     </table>
                 </div> 
                 <div class='full-assessment hidden' id="full-assessment-{{ assessment['id'] }}">
-                    
                 <br><br>
                     <div class="dataDisplay">
                         <div class='assessment-space'>
@@ -50,21 +50,17 @@
                             <span class='assessment-title'>Timestamp:</span><span> {{ assessment['timestamp'] }}</span> 
                         </div>
                     </div>
-                    <!-- <br><br> -->
                     <div  class="ct-chart ct-major-tenth" id="piechart-{{assessment['id']}}"></div>
                     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
                     <script name='{{assessment|tojson}}' >
                         var assessment = JSON.parse(document.currentScript.getAttribute("name"))
-                        console.log(document.getElementById("piechart-" + assessment.id))
                         var labels = ["Opened", "Clicked", "Neither"]
                         var data = {
                             series: [assessment['assessment-result'].peopleopened.length, assessment['assessment-result'].peopleclicked.length, assessment['assessment-result'].targets - assessment['assessment-result'].peopleopened.length - assessment['assessment-result'].peopleclicked.length]
                         };
                         var chartColors = ['#2F3061','#f42c04','#ae759f'];
                         var chartWidth = 82;
-                        console.log(assessment['assessment-result'].peopleclicked.length)
                         var sum = function(a, b) { return a + b };
-                        console.log(data.series + "" + assessment['assessment-result'].targets)
                         var chart = new Chartist.Pie('.ct-chart', data, {
                             labelInterpolationFnc: function(value,idx) {
                                 var percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
@@ -87,6 +83,19 @@
                 </div>
             </div>
         {% endfor %}
+        <button id='newassess'>New Assessment</button> 
+        <div class="modal" id="newassessform">
+            <form class="modal-content">
+              <p>Title:</p>
+              <input id="title" type="text"></input>
+              <p>Targets (comma separated):</p>
+              <textarea id="targets" class='list-input' spellcheck=false></textarea>
+              <p>Content:</p>
+              <textarea id="content" class='list-input' spellcheck=false></textarea> 
+            <button type='button' class="button" id="sendButton">Send</button>
+            <button type='button' class='button' id="closeButton">Close</button>
+            </form>
+          </div>
     {% else %}
         <div>No entries.</div>
     {% endif %}
@@ -101,4 +110,31 @@
 {% block js %}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="{{ url_for('static',filename='js/assessmentbrowser.js') }}"></script>
+    <script>
+        var modal = document.getElementById("newassessform");
+        $("#newassess").click(function() {
+            $("#newassessform .list-input").val('');
+            $("#newassessform input[type=text]").val('');
+            modal.style.display = "block";
+         });
+         $("#sendButton").click(function() {
+            var content = document.getElementById("content").value;
+            var targets = document.getElementById("targets").value.split(',');
+            var title = document.getElementById("title").value;
+            var timestamp = new Date().toJSON().slice(0,10);
+            if(!title) {
+                alert("There is no title, please fill it out!");
+            } else if(!targets[0]) {
+                alert("There are no targets, please fill them out!"); 
+            } else if(!content) {
+                alert("There is no content, please fill it out!");
+            } else {
+                modal.style.display = "none";
+                console.log("Content: " + content + "\nTargets: " + targets + "\nTitle: " + title + "\nTimestamp: " + timestamp);
+            }
+        });
+        $("#closeButton").click(function() {
+            modal.style.display = "none";
+        });
+    </script>
 {% endblock %}
