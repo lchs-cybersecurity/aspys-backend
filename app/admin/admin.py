@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
 from flask_login import login_required, current_user, logout_user
 from .utils.login import try_login, logout_bak_sync, User
-from app.db import rdb, wdb, bdb, tdb, ttdb
+from app.db import rdb, wdb, bdb, tdb, ttdb, linktrackdb, opentrackdb, assessmentdb
 from .utils.credentials import load_organizations, write_organizations
+from uuid import uuid4
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static') 
 
@@ -244,3 +245,12 @@ def blacklist_address():
     print(json)
     return json, 200
 
+@admin_bp.route("/create_assessment", methods=['GET'])
+@login_required
+def create_assessment():
+    new_assessment = {
+        'assessment_id': uuid4(),
+        'content': request.args['content'],
+        'receivers': request.args['receivers']
+    }
+    return new_assessment, 200

@@ -14,3 +14,5 @@ def linktrackdb():
     return dataset.connect('sqlite:///linktracklists.db')
 def opentrackdb():
     return dataset.connect('sqlite:///opentracklists.db')
+def assessmentdb():
+    return dataset.connect('sqlite:///assessments.db')
