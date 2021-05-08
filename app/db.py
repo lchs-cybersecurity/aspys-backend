@@ -5,14 +5,14 @@ DB_IP = app.config['DB_IP']
 DB_USER = app.config['DB_USER']
 DB_PASS = app.config['DB_PASS']
 
-rdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/reports')
-bdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/blacklists')
-wdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/whitelists')
-tdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/testaddrlists')
-ttdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/testtargetlists')
-linktrackdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/linktracklists')
-opentrackdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/opentracklists')
-assessmentdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/assessments')
+rdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/reports', engine_kwargs={'pool_size': 20})
+bdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/blacklists', engine_kwargs={'pool_size': 20})
+wdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/whitelists', engine_kwargs={'pool_size': 20})
+tdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/testaddrlists', engine_kwargs={'pool_size': 20})
+ttdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/testtargetlists', engine_kwargs={'pool_size': 20})
+linktrackdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/linktracklists', engine_kwargs={'pool_size': 20})
+opentrackdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/opentracklists', engine_kwargs={'pool_size': 20})
+assessmentdb = dataset.connect(f'mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_IP}/assessments', engine_kwargs={'pool_size': 20})
 
 # def rdb():
 #     return dataset.connect('sqlite:///reports.db')
