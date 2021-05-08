@@ -1,4 +1,4 @@
-from flask import Blueprint, request, send_file
+from flask import Blueprint, request, send_file, redirect
 from flask_cors import CORS
 from hashlib import sha256
 import os.path
@@ -41,7 +41,7 @@ def handle_report():
     report_data = data['report_data']
     org_id = request.get_json()['org_id']
     report_data['timestamp'] = now()
-    rdb().get_table(org_id).insert(report_data)
+    rdb.get_table(org_id).insert(report_data)
     return data, 200
 
 
@@ -69,8 +69,8 @@ def handle_bug():
 
     data = request.get_json()['data']
     data['timestamp'] = now()
-    # bdb() = db.get_table('bugs')
-    # bdb().insert(data)
+    # bdb = db.get_table('bugs')
+    # bdb.insert(data)
     try_discord_send(request.get_json()['discord'])
     return data, 200
 
@@ -83,7 +83,7 @@ def get_blacklist():
         return "Forbidden", 403
 
     args = request.args
-    b1 = [item['address'] for item in bdb()[args.get('org_id')].all()]
+    b1 = [item['address'] for item in bdb[args.get('org_id')].all()]
     return {
         'data': b1,
     }
@@ -97,7 +97,7 @@ def get_whitelist():
         return "Forbidden", 403
 
     args = request.args
-    w1 = [item['address'] for item in wdb()[args.get('org_id')].all()]
+    w1 = [item['address'] for item in wdb[args.get('org_id')].all()]
     return {
         'data': w1,
     }
@@ -116,17 +116,17 @@ def verify_email():
     numrating = 0
 
     # whitelisted --> 1
-    for item in wdb()[request.args.get('org_id')].all():
+    for item in wdb[request.args.get('org_id')].all():
         if re.match(item['address'], target):
             numrating = 1
 
     # blacklisted --> 2
-    for item in bdb()[request.args.get('org_id')].all():
+    for item in bdb[request.args.get('org_id')].all():
         if re.match(item['address'], target):
             numrating = 2
 
     # test db --> 0 (pretend to be unclassified)
-    for item in tdb()[request.args.get('org_id')].all():
+    for item in tdb[request.args.get('org_id')].all():
         if re.match(item['address'], target):
             numrating = 0
     
@@ -152,17 +152,17 @@ def verify_emails():
             numrating = 0
 
             # whitelisted --> 1
-            for item in wdb()[request.args.get('org_id')].all():
+            for item in wdb[request.args.get('org_id')].all():
                 if re.match(item['address'], target):
                     numrating = 1
 
             # blacklisted --> 2
-            for item in bdb()[request.args.get('org_id')].all():
+            for item in bdb[request.args.get('org_id')].all():
                 if re.match(item['address'], target):
                     numrating = 2
 
             # test db --> 0 (pretend to be unclassified)
-            for item in tdb()[request.args.get('org_id')].all():
+            for item in tdb[request.args.get('org_id')].all():
                 if re.match(item['address'], target):
                     numrating = 0
 
@@ -227,7 +227,7 @@ def get_img_opentrack():
         'assessment_id': assessment_id,
         'address': request.args['address']
     }
-    table = opentrackdb().get_table(org_id)
+    table = opentrackdb.get_table(org_id)
 
     redundant = False
     for item in table:
@@ -235,7 +235,7 @@ def get_img_opentrack():
             redundant = True
             # return "Log Conflict", 409
 
-    if redundant:
+    if not redundant:
         table.insert(dbitem)
 
     return send_file(rel_path('./img/pixel_white_1x1.png'), mimetype='image/png')
@@ -251,7 +251,7 @@ def get_img_linktrack():
         'assessment_id': assessment_id,
         'address': request.args['address']
     }
-    table = linktrackdb().get_table(org_id)
+    table = linktrackdb.get_table(org_id)
 
     redundant = False
     for item in table:
@@ -259,17 +259,19 @@ def get_img_linktrack():
             redundant = True
             # return "Log Conflict", 409
 
-    if redundant:
+    if not redundant:
         table.insert(dbitem)
 
-    return send_file(rel_path('./img/pixel_white_1x1.png'), mimetype='image/png')
+    # no longer need to send img pixel for this link, instead redirect to phished.html on club site
+    # return send_file(rel_path('./img/pixel_white_1x1.png'), mimetype='image/png')
+    return redirect("https://lchs-cybersecurity.github.io/phished")
 
 
 def rel_path(string):
     return os.path.join(os.path.dirname(__file__), string)
 
 def assessmentExists(org_id: str, assessment_id: str):
-    table = assessmentdb().get_table(org_id)
+    table = assessmentdb.get_table(org_id)
     for item in table:
         if item['assessment_id'] == assessment_id:
             return True
