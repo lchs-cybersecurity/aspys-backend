@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
 from flask_login import login_required, current_user, logout_user
 from .utils.login import try_login, logout_bak_sync, User
-from app.db import rdb, wdb, bdb, tdb, ttdb
+from app.db import rdb, wdb, bdb, tdb, ttdb, linktrackdb, opentrackdb, assessmentdb
 from .utils.credentials import load_organizations, write_organizations
+from uuid import uuid4
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static') 
 
@@ -60,18 +61,18 @@ def display_assessment():
 def display_browser():
     org_id = current_user.org_id
 
-    data = rdb().get_table(org_id).all()
-    bl = bdb().get_table(org_id).all()
+    data = rdb.get_table(org_id).all()
+    blacklist = bdb.get_table(org_id).all()
 
-    return render_template("reportbrowser.html", data=data, bl=bl, org_id=org_id)
+    return render_template("reportbrowser.html", data=data, bl=blacklist, org_id=org_id)
 
 
 @admin_bp.route("/settings", methods=['GET'])
 @login_required
 def display_settings():
     org_id = current_user.org_id
-    wl = wdb().get_table(org_id).all()
-    bl = bdb().get_table(org_id).all()
+    wl = wdb.get_table(org_id).all()
+    bl = bdb.get_table(org_id).all()
 
     orgs = load_organizations()
     '''
@@ -97,8 +98,8 @@ def write_settings():
     org_id = current_user.org_id
 
     # TODO: Come up with proper (EASY AND STREAMLINED) way to display & write to WL/BL
-    # wl = wdb().get_table(org_id).all()
-    # bl = bdb().get_table(org_id).all()
+    # wl = wdb.get_table(org_id).all()
+    # bl = bdb.get_table(org_id).all()
 
     support_emails_str = str(request.form.get("support_emails"))
 
@@ -120,7 +121,7 @@ def write_settings():
 @admin_bp.route("/blacklist", methods=['GET'])
 def get_blacklist():
     args = request.args
-    b1 = [item['address'] for item in bdb()[args.get('org_id')].all()]
+    b1 = [item['address'] for item in bdb[args.get('org_id')].all()]
     return {
         'data': b1,
     }
@@ -129,7 +130,7 @@ def get_blacklist():
 @login_required
 def get_whitelist():
     args = request.args
-    w1 = [item['address'] for item in wdb()[args.get('org_id')].all()]
+    w1 = [item['address'] for item in wdb[args.get('org_id')].all()]
     return {
         'data': w1,
     }
@@ -138,7 +139,7 @@ def get_whitelist():
 @login_required
 def get_testaddrlist():
     args = request.args
-    w1 = [item['address'] for item in tdb()[args.get('org_id')].all()]
+    w1 = [item['address'] for item in tdb[args.get('org_id')].all()]
     return {
         'data': w1,
     }
@@ -147,7 +148,7 @@ def get_testaddrlist():
 @login_required
 def get_testtargetlist():
     args = request.args
-    w1 = [item['address'] for item in ttdb()[args.get('org_id')].all()]
+    w1 = [item['address'] for item in ttdb[args.get('org_id')].all()]
     return {
         'data': w1,
     }
@@ -158,7 +159,7 @@ def get_testtargetlist():
 @login_required
 def delete_item():
     json = request.get_json()
-    rdb()[json.get('org_id')].delete(id=json.get('id'))
+    rdb[json.get('org_id')].delete(id=json.get('id'))
     return json, 200
 
 
@@ -169,7 +170,7 @@ def set_blacklist():
     org_id = json.get('org_id') 
     blacklist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     
-    table = bdb().get_table(org_id) 
+    table = bdb.get_table(org_id) 
 
     table.delete() 
 
@@ -185,7 +186,7 @@ def set_whitelist():
     org_id = json.get('org_id') 
     whitelist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     
-    table = wdb().get_table(org_id) 
+    table = wdb.get_table(org_id) 
 
     table.delete() 
 
@@ -202,7 +203,7 @@ def set_testaddrlist():
     testaddrlist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     print(testaddrlist)
     
-    table = tdb().get_table(org_id) 
+    table = tdb.get_table(org_id) 
 
     table.delete() 
 
@@ -219,7 +220,7 @@ def set_testtargetlist():
     testtargetlist = sorted([{'address': address} for address in json['list']], key=lambda k: k['address'])
     print(testtargetlist)
     
-    table = ttdb().get_table(org_id) 
+    table = ttdb.get_table(org_id) 
 
     table.delete() 
 
@@ -232,7 +233,7 @@ def set_testtargetlist():
 @login_required
 def whitelist_address():
     json = request.get_json()
-    wdb()[json.get('org_id')].insert(json)
+    wdb[json.get('org_id')].insert(json)
     return json, 200
 
 
@@ -240,7 +241,17 @@ def whitelist_address():
 @login_required
 def blacklist_address():
     json = request.get_json()
-    bdb()[json.get('org_id')].upsert(json, ['address'])
+    bdb[json.get('org_id')].upsert(json, ['address'])
     print(json)
     return json, 200
 
+@admin_bp.route("/create_assessment", methods=['GET'])
+@login_required
+def create_assessment():
+    new_assessment = {
+        'assessment_id': uuid4(),
+        'content': request.args['content'],
+        'receivers': request.args['receivers']
+    }
+    assessmentdb.insert(new_assessment)
+    return new_assessment, 200
